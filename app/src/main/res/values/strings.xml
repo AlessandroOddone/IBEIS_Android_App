@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="app_name">Ibeis</string>
+    <string name="action_settings">Settings</string>
+    <string name="take_picture_button_text">TAKE A PICTURE\nPhotograph an encountered animal and learn more about it.</string>
+    <string name="my_pictures_button_text">ENCOUNTERS\nVisualize all the IBEIS encounters you have experienced.</string>
+    <string name="gps_loading">Obtaining location...</string>
+    <string name="gps_available">Location available</string>
+    <string name="gps_not_enabled">GPS service not enabled</string>
+    <string name="gps_alert_title">GPS not active</string>
+    <string name="gps_alert_message">Enable GPS service on your device.</string>
+    <string name="gps_alert_neg">Ignore</string>
+    <string name="gps_alert_pos">Settings</string>
+    <string name="no_location_alert_title">Invalid Location</string>
+    <string name="no_location_alert_message">Your current location is not supported by Ibeis.</string>
+    <string name="no_location_alert_btn">Got it</string>
+    <string name="obtaining_location_alert_title">Obtaining Location</string>
+    <string name="obtaining_location_alert_message">Wait until Ibeis has obtained your position.</string>
+    <string name="obtaining_location_alert_btn">Got it</string>
+    <string name="title_activity_individual_recognition"></string>
+    <string name="title_activity_my_pictures">Encounters</string>
+    <string name="title_activity_my_picture_detail">Encounter</string>
+    <string name="detail_individual_info_title">Individual</string>
+    <string name="detail_location_title">Context</string>
+
+</resources>

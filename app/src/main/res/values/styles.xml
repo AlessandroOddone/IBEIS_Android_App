@@ -1,0 +1,52 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:buttonStyle">@style/AppThemeButtonStyle</item>
+        <item name="android:textColorPrimary">@color/primary_text_white</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_black</item>
+        <item name="android:textColorSecondary">@color/secondary_text_white</item>
+        <item name="android:textColorSecondaryInverse">@color/secondary_text_black</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="AppThemeButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:background">@drawable/btn_app</item>
+    </style>
+
+    <style name="MainButtonTitleTextAppearance" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/primary_text_white</item>
+        <item name="android:textSize">@dimen/button_main_menu_text_size_title</item>
+    </style>
+
+    <style name="MainButtonDescriptionTextAppearance" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/secondary_text_white</item>
+        <item name="android:textSize">@dimen/button_main_menu_text_size_description</item>
+    </style>
+
+    <style name="AppToolbarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/primary_dark</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="PictureDetailSectionTitle">
+        <item name="android:textColor">@color/primary_text_black</item>
+        <item name="android:textSize">@dimen/detail_title_text_size</item>
+    </style>
+
+    <style name="PictureDetailAttributeTitle">
+        <item name="android:textColor">#B3000000</item>
+        <item name="android:textSize">@dimen/detail_attr_title_text_size</item>
+    </style>
+
+    <style name="PictureDetailAttributeValue">
+        <item name="android:textColor">@color/secondary_text_black</item>
+        <item name="android:textSize">@dimen/detail_attr_value_text_size</item>
+    </style>
+
+</resources>

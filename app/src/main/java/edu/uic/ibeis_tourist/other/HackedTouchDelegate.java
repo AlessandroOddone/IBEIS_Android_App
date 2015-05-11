@@ -1,4 +1,4 @@
-package edu.uic.ibeis_tourist.components;
+package edu.uic.ibeis_tourist.other;
 
 import android.graphics.Rect;
 import android.view.MotionEvent;

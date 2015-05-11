@@ -16,13 +16,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.exceptions.UnexpectedCallingActivityException;
-import edu.uic.ibeis_tourist.ibeis.IbeisInterfaceImplementation;
+import edu.uic.ibeis_tourist.ibeis.IbeisController;
 import edu.uic.ibeis_tourist.interfaces.IbeisInterface;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
@@ -62,6 +63,7 @@ public class MyPictureDetailActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_picture_detail_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         detailLayout = (RelativeLayout) findViewById(R.id.detail_layout);
@@ -108,7 +110,7 @@ public class MyPictureDetailActivity extends ActionBarActivity {
                 Position position = intent.getParcelableExtra("position");
 
                 try {
-                    ibeis = new IbeisInterfaceImplementation();
+                    ibeis = new IbeisController();
                     ibeis.identifyIndividual(fileName, location, position, dateTime, this);
                 } catch (MatchNotFoundException e) {
                     // TODO handle match not found
@@ -189,7 +191,8 @@ public class MyPictureDetailActivity extends ActionBarActivity {
             setDetailAttributeText(sexText, "Sex: " + (sex != null ? sex.asString() : NOT_AVAILABLE));
             setDetailAttributeText(locationText, "Location: " + (location != null ? location.getName() : NOT_AVAILABLE));
             setDetailAttributeText(coordinatesText, "Coordinates: " + (position != null ? "("
-                    + position.getLatitude() + ", " + position.getLongitude() + ")" : NOT_AVAILABLE));
+                    + new DecimalFormat("0.000").format(position.getLatitude()) + ", " +
+                    new DecimalFormat("0.000").format(position.getLongitude()) + ")" : NOT_AVAILABLE));
             setDetailAttributeText(datetimeText, "Time: " + (datetime != null ?
                     DateTimeUtils.calendarToString(datetime, DateTimeUtils.DateFormat.DATETIME) : NOT_AVAILABLE));
         }

@@ -3,15 +3,8 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/main_toolbar"
-        android:layout_height="?actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:background="@color/primary"
-        android:gravity="center_vertical"
-        android:textAlignment="gravity"
-        style="@style/AppToolbarStyle"/>
+    <include layout="@layout/toolbar_actionbar"
+        android:id="@+id/main_toolbar"/>
 
     <LinearLayout
         android:id="@+id/position_progress_bar"

@@ -28,7 +28,7 @@ public class DateTimeUtils {
     }
 
     public enum DateFormat {
-        DATE_ONLY("LLL dd',' yyyy"), DATETIME("LLL dd',' yyyy 'at' h:mm a"), DATABASE("yyyy-MM-dd HH:mm:ss");
+        DATE_ONLY("LLL d',' yyyy"), DATETIME("LLL d',' yyyy 'at' h:mm a"), DATABASE("yyyy-MM-dd HH:mm:ss");
 
         private String value;
 

@@ -52,13 +52,16 @@
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.uic.ibeis_tourist.MainActivity"
-                android:screenOrientation="portrait" />
+                android:value="edu.uic.ibeis_tourist.MainActivity"/>
         </activity>
 
         <activity
             android:name=".MyPictureDetailActivity"
-            android:label="@string/title_activity_my_picture_detail">
+            android:label="@string/title_activity_my_picture_detail"
+            android:parentActivityName=".MyPicturesActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uic.ibeis_tourist.MyPicturesActivity" />
         </activity>
 
     </application>

@@ -154,7 +154,6 @@ public class PositionService extends Service {
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            //TODO implement
         }
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 
 import edu.uic.ibeis_tourist.MyPictureDetailActivity;
 import edu.uic.ibeis_tourist.R;
-import edu.uic.ibeis_tourist.components.HackedTouchDelegate;
+import edu.uic.ibeis_tourist.other.HackedTouchDelegate;
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;

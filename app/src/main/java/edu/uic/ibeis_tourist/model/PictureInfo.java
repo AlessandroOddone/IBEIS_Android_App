@@ -9,7 +9,6 @@ import edu.uic.ibeis_tourist.exceptions.InvalidSexException;
 import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
 
 public class PictureInfo implements Parcelable {
-    // TODO add attributes
     private String fileName;
     private GregorianCalendar dateTime;
     private Position position;

@@ -4,16 +4,8 @@
     android:layout_height="match_parent"
     tools:context="edu.uic.ibeis_tourist.MyPictureDetailActivity">
 
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/my_picture_detail_toolbar"
-        android:layout_height="?actionBarSize"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:background="@color/primary"
-        android:gravity="center_vertical"
-        android:textAlignment="gravity"
-        style="@style/AppToolbarStyle" />
-
+    <include layout="@layout/toolbar_actionbar"
+        android:id="@+id/my_picture_detail_toolbar"/>
 
     <RelativeLayout
         android:id="@+id/detail_layout"
@@ -57,7 +49,7 @@
                     android:id="@+id/detail_individual_info_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="5dp"
                     android:text="@string/detail_individual_info_title"
                     android:textAppearance="@style/PictureDetailSectionTitle"/>
 
@@ -77,11 +69,13 @@
             <TextView
                 android:id="@+id/detail_individual_species"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp" />
             <TextView
                 android:id="@+id/detail_individual_name"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp" />
             <TextView
                 android:id="@+id/detail_individual_sex"
                 android:layout_width="wrap_content"
@@ -114,7 +108,7 @@
                     android:id="@+id/detail_location_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="5dp"
                     android:text="@string/detail_location_title"
                     android:textAppearance="@style/PictureDetailSectionTitle"/>
 
@@ -128,11 +122,13 @@
             <TextView
                 android:id="@+id/detail_encounter_location"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp" />
             <TextView
                 android:id="@+id/detail_encounter_coordinates"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp" />
             <TextView
                 android:id="@+id/detail_encounter_date"
                 android:layout_width="wrap_content"

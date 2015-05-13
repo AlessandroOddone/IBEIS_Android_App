@@ -154,7 +154,6 @@ public class MyPictureDetailActivity extends ActionBarActivity {
 
         if(pictureInfo == null) {
             System.out.println("pictureInfo == null");
-
             // TODO handle null pictureInfo
             return;
         }

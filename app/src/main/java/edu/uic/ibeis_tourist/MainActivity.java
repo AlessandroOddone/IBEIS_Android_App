@@ -175,7 +175,6 @@ public class MainActivity extends ActionBarActivity {
             try {
                 unregisterReceiver(positionEventsReceiver);
             } catch (IllegalArgumentException e) {
-                // TODO handle exception: receiver not registered
                 e.printStackTrace();
             }
             // Stop GPS Service

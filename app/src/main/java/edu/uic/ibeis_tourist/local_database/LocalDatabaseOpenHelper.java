@@ -44,14 +44,14 @@ public class LocalDatabaseOpenHelper extends SQLiteOpenHelper {
                   LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID,
                   values);
 
-        // SSR
+        // My Apartment
         values = new ContentValues();
         values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID, 2);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_LOCATION_NAME, "SSR");
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LAT, 41.86931);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LON, -87.67987);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LAT, 41.87287);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LON, -87.67145);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_LOCATION_NAME, "My Apartment");
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LAT, 41.929189);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LON, -87.715025);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LAT, 41.933080);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LON, -87.708668);
 
         db.insert(LocalDatabaseContract.LocationEntry.TABLE_NAME,
                 LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID,

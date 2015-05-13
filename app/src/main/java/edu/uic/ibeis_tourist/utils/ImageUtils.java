@@ -23,7 +23,7 @@ import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 
 public class ImageUtils {
 
-    private static final String pathToFile = Environment.getExternalStorageDirectory().getAbsolutePath()
+    public static final String PATH_TO_IMAGE_FILE = Environment.getExternalStorageDirectory().getAbsolutePath()
             + File.separator + "IBEIS" + File.separator;
 
     /**
@@ -31,11 +31,11 @@ public class ImageUtils {
      * @return Generated file
      */
     public static File generateImageFile(String fileName) {
-        File ibeisDir = new File(pathToFile);
+        File ibeisDir = new File(PATH_TO_IMAGE_FILE);
         if(!ibeisDir.exists()) {
             ibeisDir.mkdir();
         }
-        return new File(pathToFile + fileName);
+        return new File(PATH_TO_IMAGE_FILE + fileName);
     }
 
     /**
@@ -112,7 +112,7 @@ public class ImageUtils {
     private static Bitmap getBitmap(String fileName, int requestedHeight, int requestedWidth,
                              Bitmap.Config colorConfig) throws IOException {
 
-        String filePath = pathToFile + fileName;
+        String filePath = PATH_TO_IMAGE_FILE + fileName;
         if (!(new File(filePath)).exists()) {
             throw new FileNotFoundException();
         }

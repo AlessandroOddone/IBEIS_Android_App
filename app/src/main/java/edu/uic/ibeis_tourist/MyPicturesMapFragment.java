@@ -125,7 +125,7 @@ public class MyPicturesMapFragment extends Fragment {
     public void displayPicturesOnMap() {
         final LatLngBounds.Builder mapBoundsBuilder = new LatLngBounds.Builder();
 
-        if(pictureList.size() > 0) {
+        if(pictureList != null && pictureList.size() > 0) {
             if (location != null) {
                 LocationBounds bounds = location.getBounds();
                 mapBoundsBuilder

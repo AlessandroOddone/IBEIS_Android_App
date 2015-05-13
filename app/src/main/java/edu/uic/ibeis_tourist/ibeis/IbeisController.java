@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
 import edu.uic.ibeis_tourist.model.Sex;
+import edu.uic.ibeis_tourist.utils.ImageUtils;
 
 
 public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisInterface {
@@ -28,7 +30,7 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
     public void identifyIndividual(String fileName, Location location, Position position,
                                    GregorianCalendar dateTime, Context context) throws MatchNotFoundException {
 
-        System.out.println("IbeisInterfaceImplementation: identify individual");
+        System.out.println("IbeisController: Identify Individual");
         new IdentifyIndividualAsyncTask(fileName, position, dateTime, location, context).execute();
     }
 
@@ -47,6 +49,8 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
         private IdentifyIndividualAsyncTask(String fileName, Position position, GregorianCalendar dateTime,
                                             Location location, Context context) {
 
+            System.out.println("IdentifyIndividualAsyncTask");
+
             ibeis = new Ibeis();
 
             mFileName = fileName;
@@ -56,26 +60,12 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
             mContext = context;
         }
 
+        // TODO temporary implementation
         @Override
         protected PictureInfo doInBackground(Void... params) {
             System.out.println("IbeisInterfaceImplementation: IdentifyIndividual AsyncTask");
 
             PictureInfo pictureInfo = new PictureInfo();
-
-            IbeisImage uploadedImage;
-            List<IbeisAnnotation> imageAnnotations = null;
-
-            try {
-                uploadedImage = ibeis.uploadImage(new File(mFileName));
-                imageAnnotations = ibeis.runAnimalDetection(uploadedImage, Species.GIRAFFE);
-            } catch (UnsupportedImageFileTypeException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (UnsuccessfulHttpRequestException e) {
-                e.printStackTrace();
-            }
-
             pictureInfo.setFileName(mFileName);
             pictureInfo.setLocation(mLocation);
             pictureInfo.setPosition(mPosition);
@@ -84,6 +74,29 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
             pictureInfo.setIndividualSpecies(edu.uic.ibeis_tourist.model.Species.UNKNOWN);
             pictureInfo.setIndividualSex(Sex.UNKNOWN);
 
+            IbeisImage uploadedImage = null;
+            List<IbeisAnnotation> imageAnnotations = null;
+
+            try {
+                uploadedImage = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mFileName));
+                System.out.println("UPLOADED IMAGE: id=" + uploadedImage.getId());
+            } catch (UnsupportedImageFileTypeException | IOException | UnsuccessfulHttpRequestException e) {
+                //TODO handle exception
+                System.out.println("Error uploading image\n");
+                e.printStackTrace(System.out);
+            }
+
+            try {
+                if(uploadedImage != null) {
+                    // TODO this is a workaround
+                    imageAnnotations = ibeis.runAnimalDetection(Arrays.asList(uploadedImage, uploadedImage), Species.GIRAFFE).get(0);
+                    System.out.println("IMAGE ANNOTATIONS: " + imageAnnotations);
+                }
+            } catch (IOException | UnsuccessfulHttpRequestException e) {
+                //TODO handle exception
+                System.out.println("Error in animal detection\n");
+                e.printStackTrace(System.out);
+            }
 
             if(imageAnnotations  != null && imageAnnotations.size() > 0) {
                 pictureInfo.setIndividualSpecies(edu.uic.ibeis_tourist.model.Species.GIRAFFE);

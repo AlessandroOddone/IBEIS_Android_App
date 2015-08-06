@@ -4,27 +4,33 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
 import edu.uic.ibeis_java_api.api.Ibeis;
 import edu.uic.ibeis_java_api.api.IbeisAnnotation;
 import edu.uic.ibeis_java_api.api.IbeisImage;
-import edu.uic.ibeis_java_api.exceptions.UnsuccessfulHttpRequestException;
-import edu.uic.ibeis_java_api.exceptions.UnsupportedImageFileTypeException;
+import edu.uic.ibeis_java_api.api.IbeisIndividual;
+import edu.uic.ibeis_java_api.api.IbeisQueryResult;
+import edu.uic.ibeis_java_api.api.IbeisQueryScore;
+import edu.uic.ibeis_java_api.values.Sex;
 import edu.uic.ibeis_java_api.values.Species;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.local_database.LocalDatabase;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
-import edu.uic.ibeis_tourist.model.Sex;
+import edu.uic.ibeis_tourist.model.SexEnum;
+import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
 
 
 public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisInterface {
+
+    private static final int BROOKFIELD_GIRAFFES_ENCOUNTER_ID = 99;
+    private static final int QUERY_RECOGNITION_THRESHOLD = 12;
 
     @Override
     public void identifyIndividual(String fileName, Location location, Position position,
@@ -71,37 +77,48 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
             pictureInfo.setPosition(mPosition);
             pictureInfo.setDateTime(mDateTime);
             pictureInfo.setIndividualName(null);
-            pictureInfo.setIndividualSpecies(edu.uic.ibeis_tourist.model.Species.UNKNOWN);
-            pictureInfo.setIndividualSex(Sex.UNKNOWN);
-
-            IbeisImage uploadedImage = null;
-            List<IbeisAnnotation> imageAnnotations = null;
+            pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
+            pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
 
             try {
-                uploadedImage = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mFileName));
-                System.out.println("UPLOADED IMAGE: id=" + uploadedImage.getId());
-            } catch (UnsupportedImageFileTypeException | IOException | UnsuccessfulHttpRequestException e) {
-                //TODO handle exception
-                System.out.println("Error uploading image\n");
-                e.printStackTrace(System.out);
-            }
+                //upload image to IBEIS
+                IbeisImage image = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mFileName));
 
-            try {
-                if(uploadedImage != null) {
-                    // TODO this is a workaround
-                    imageAnnotations = ibeis.runAnimalDetection(Arrays.asList(uploadedImage, uploadedImage), Species.GIRAFFE).get(0);
-                    System.out.println("IMAGE ANNOTATIONS: " + imageAnnotations);
+                //run animal detection for giraffes
+                List<IbeisAnnotation> imageAnnotations = ibeis.runAnimalDetection(image, Species.GIRAFFE);
+
+                if(imageAnnotations.size() > 0) {//if at least an annotation is found
+                    pictureInfo.setIndividualSpecies(SpeciesEnum.GIRAFFE);
+
+                    //TODO handle multiple annotations (temporary solution: the query annotation is the first annotation in the list)
+                    IbeisAnnotation queryAnnotation = imageAnnotations.get(0);
+
+                    List<IbeisAnnotation> dbAnnotations = new ArrayList<>();
+                    for(IbeisIndividual i : ibeis.getEncounterById(BROOKFIELD_GIRAFFES_ENCOUNTER_ID).getIndividuals()) {
+                        dbAnnotations.addAll(i.getAnnotations());
+                    }
+                    IbeisQueryResult queryResult = ibeis.query(queryAnnotation, dbAnnotations);
+                    List<IbeisQueryScore> queryScores = queryResult.getScores();
+
+                    //sort query scores from the highest to the lowest
+                    Collections.sort(queryScores, Collections.reverseOrder());
+                    //get the highest score
+                    IbeisQueryScore highestScore = queryScores.get(0);
+
+                    if(highestScore.getScore() > QUERY_RECOGNITION_THRESHOLD) {
+                        IbeisIndividual individual = highestScore.getDbAnnotation().getIndividual();
+                        pictureInfo.setIndividualName(individual.getName());
+
+                        Sex individualSex = individual.getSex();
+                        pictureInfo.setIndividualSex(
+                                (individualSex == Sex.MALE) ? SexEnum.MALE :
+                                        (individualSex == Sex.FEMALE) ? SexEnum.FEMALE :
+                                                SexEnum.UNKNOWN);
+                    }
                 }
-            } catch (IOException | UnsuccessfulHttpRequestException e) {
-                //TODO handle exception
-                System.out.println("Error in animal detection\n");
-                e.printStackTrace(System.out);
+            } catch (Exception e) {//TODO handle exceptions
+                e.printStackTrace();
             }
-
-            if(imageAnnotations  != null && imageAnnotations.size() > 0) {
-                pictureInfo.setIndividualSpecies(edu.uic.ibeis_tourist.model.Species.GIRAFFE);
-            }
-
             return pictureInfo;
         }
 

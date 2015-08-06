@@ -2,12 +2,12 @@ package edu.uic.ibeis_tourist.model;
 
 import edu.uic.ibeis_tourist.exceptions.InvalidSexException;
 
-public enum Sex {
+public enum SexEnum {
     MALE("M"), FEMALE("F"), UNKNOWN("N/A");
 
     private String value;
 
-    Sex(String value) {
+    SexEnum(String value) {
         this.value = value;
     }
 
@@ -15,9 +15,9 @@ public enum Sex {
         return value;
     }
 
-    public static Sex fromString(String value) throws InvalidSexException {
+    public static SexEnum fromString(String value) throws InvalidSexException {
 
-        for(Sex s : Sex.values()) {
+        for(SexEnum s : SexEnum.values()) {
             if(s.asString().equals(value)) {
                 return s;
             }

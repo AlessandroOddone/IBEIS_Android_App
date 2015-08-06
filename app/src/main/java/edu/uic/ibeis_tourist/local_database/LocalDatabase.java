@@ -21,8 +21,8 @@ import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.LocationBounds;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
-import edu.uic.ibeis_tourist.model.Sex;
-import edu.uic.ibeis_tourist.model.Species;
+import edu.uic.ibeis_tourist.model.SexEnum;
+import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;
 import edu.uic.ibeis_tourist.utils.LocationUtils;
 
@@ -153,11 +153,11 @@ public class LocalDatabase implements LocalDatabaseInterface {
             values.put(LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_LOCATION_ID,
                     mPictureInfo.getLocation().getId());
 
-            Species species = mPictureInfo.getIndividualSpecies();
+            SpeciesEnum species = mPictureInfo.getIndividualSpecies();
             values.put(LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES,
                     species != null ? species.asString() : NOT_AVAILABLE);
 
-            Sex sex = mPictureInfo.getIndividualSex();
+            SexEnum sex = mPictureInfo.getIndividualSex();
             values.put(LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX,
                     sex != null ? sex.asString() : NOT_AVAILABLE);
 
@@ -310,23 +310,23 @@ public class LocalDatabase implements LocalDatabaseInterface {
                     String sex = cursor.getString(cursor.getColumnIndex
                             (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX));
                     if(sex.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSex(Sex.UNKNOWN);
+                        pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
                     }
                     else {
-                        pictureInfo.setIndividualSex(Sex.fromString(sex));
+                        pictureInfo.setIndividualSex(SexEnum.fromString(sex));
                     }
 
                     String species = cursor.getString(cursor.getColumnIndex
                             (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES));
                     if(species.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSpecies(Species.UNKNOWN);
+                        pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
                     }
                     else {
-                        pictureInfo.setIndividualSpecies(Species.fromString(species));
+                        pictureInfo.setIndividualSpecies(SpeciesEnum.fromString(species));
                     }
 
                 } catch (InvalidSexException | InvalidSpeciesException e) {
-                    pictureInfo.setIndividualSex(Sex.UNKNOWN);
+                    pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
                     e.printStackTrace();
                 }
 
@@ -441,23 +441,23 @@ public class LocalDatabase implements LocalDatabaseInterface {
                     String sex = cursor.getString(cursor.getColumnIndex
                             (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX));
                     if(sex.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSex(Sex.UNKNOWN);
+                        pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
                     }
                     else {
-                        pictureInfo.setIndividualSex(Sex.fromString(sex));
+                        pictureInfo.setIndividualSex(SexEnum.fromString(sex));
                     }
 
                     String species = cursor.getString(cursor.getColumnIndex
                             (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES));
                     if(species.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSpecies(Species.UNKNOWN);
+                        pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
                     }
                     else {
-                        pictureInfo.setIndividualSpecies(Species.fromString(species));
+                        pictureInfo.setIndividualSpecies(SpeciesEnum.fromString(species));
                     }
 
                 } catch (InvalidSexException | InvalidSpeciesException e) {
-                    pictureInfo.setIndividualSex(Sex.UNKNOWN);
+                    pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
                     e.printStackTrace();
                 }
 

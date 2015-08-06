@@ -31,35 +31,9 @@ public class LocalDatabaseOpenHelper extends SQLiteOpenHelper {
     public void addLocations(SQLiteDatabase db) {
         ContentValues values;
 
-        // UIC East Campus
-        values = new ContentValues();
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID, 1);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_LOCATION_NAME, "UIC East Campus");
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LAT, 41.8591);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LON, -87.6663);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LAT, 41.8734);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LON, -87.6326);
-
-        db.insert(LocalDatabaseContract.LocationEntry.TABLE_NAME,
-                  LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID,
-                  values);
-
-        // My Apartment
-        values = new ContentValues();
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID, 2);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_LOCATION_NAME, "My Apartment");
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LAT, 41.929189);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LON, -87.715025);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LAT, 41.933080);
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LON, -87.708668);
-
-        db.insert(LocalDatabaseContract.LocationEntry.TABLE_NAME,
-                LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID,
-                values);
-
         // Brookfield Zoo
         values = new ContentValues();
-        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID, 3);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID, 1);
         values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_LOCATION_NAME, "Brookfield Zoo");
         values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LAT, 41.82912);
         values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LON, -87.84460);
@@ -70,5 +44,17 @@ public class LocalDatabaseOpenHelper extends SQLiteOpenHelper {
                 LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID,
                 values);
 
+        // Not Brookfield Zoo
+        values = new ContentValues();
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID, 2);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_LOCATION_NAME, "Not Brookfield Zoo");
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LAT, 21.231310);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_SW_BOUND_LON, -125.631407);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LAT, 71.554712);
+        values.put(LocalDatabaseContract.LocationEntry.COLUMN_NAME_NE_BOUND_LON, 49.183050);
+
+        db.insert(LocalDatabaseContract.LocationEntry.TABLE_NAME,
+                LocalDatabaseContract.LocationEntry.COLUMN_NAME_ID,
+                values);
     }
 }

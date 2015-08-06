@@ -28,8 +28,8 @@ import edu.uic.ibeis_tourist.interfaces.IbeisInterface;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
-import edu.uic.ibeis_tourist.model.Sex;
-import edu.uic.ibeis_tourist.model.Species;
+import edu.uic.ibeis_tourist.model.SexEnum;
+import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
 import edu.uic.ibeis_tourist.values.ActivityEnum;
@@ -178,9 +178,9 @@ public class MyPictureDetailActivity extends ActionBarActivity {
                 }
             }
 
-            Species species = pictureInfo.getIndividualSpecies();
+            SpeciesEnum species = pictureInfo.getIndividualSpecies();
             String name = pictureInfo.getIndividualName();
-            Sex sex = pictureInfo.getIndividualSex();
+            SexEnum sex = pictureInfo.getIndividualSex();
             Location location = pictureInfo.getLocation();
             Position position = pictureInfo.getPosition();
             Calendar datetime = pictureInfo.getDateTime();

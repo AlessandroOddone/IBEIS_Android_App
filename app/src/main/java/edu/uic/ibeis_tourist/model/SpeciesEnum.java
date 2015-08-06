@@ -1,13 +1,14 @@
 package edu.uic.ibeis_tourist.model;
 
+import edu.uic.ibeis_java_api.values.Species;
 import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
 
-public enum Species {
-    GIRAFFE("Giraffe"), GREVY_ZEBRA("Grevy Zebra"), PLAIN_ZEBRA("Plain Zebra"), UNKNOWN("N/A");
+public enum SpeciesEnum {
+    GIRAFFE(Species.GIRAFFE.getValue()), UNKNOWN("N/A");
 
     private String value;
 
-    Species(String value) {
+    SpeciesEnum(String value) {
         this.value = value;
     }
 
@@ -15,9 +16,9 @@ public enum Species {
         return value;
     }
 
-    public static Species fromString(String value) throws InvalidSpeciesException{
+    public static SpeciesEnum fromString(String value) throws InvalidSpeciesException{
 
-        for(Species s : Species.values()) {
+        for(SpeciesEnum s : SpeciesEnum.values()) {
             if(s.asString().equals(value)) {
                 return s;
             }

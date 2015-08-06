@@ -13,8 +13,8 @@ public class PictureInfo implements Parcelable {
     private GregorianCalendar dateTime;
     private Position position;
     private String individualName;
-    private Species individualSpecies;
-    private Sex individualSex;
+    private SpeciesEnum individualSpecies;
+    private SexEnum individualSex;
     private Location location;
 
     public PictureInfo() {}
@@ -51,28 +51,28 @@ public class PictureInfo implements Parcelable {
         this.individualName = individualName;
     }
 
-    public Species getIndividualSpecies() {
+    public SpeciesEnum getIndividualSpecies() {
         return individualSpecies;
     }
 
-    public void setIndividualSpecies(Species individualSpecies) {
+    public void setIndividualSpecies(SpeciesEnum individualSpecies) {
         this.individualSpecies = individualSpecies;
     }
 
     public void setIndividualSpecies(String individualSpecies) throws InvalidSpeciesException {
-        this.individualSpecies = Species.fromString(individualSpecies);
+        this.individualSpecies = SpeciesEnum.fromString(individualSpecies);
     }
 
-    public Sex getIndividualSex() {
+    public SexEnum getIndividualSex() {
         return individualSex;
     }
 
-    public void setIndividualSex(Sex individualSex) {
+    public void setIndividualSex(SexEnum individualSex) {
         this.individualSex = individualSex;
     }
 
     public void setIndividualSex(String individualSex) throws InvalidSexException {
-        this.individualSex = Sex.fromString(individualSex);
+        this.individualSex = SexEnum.fromString(individualSex);
     }
 
     public Location getLocation() {
@@ -92,8 +92,8 @@ public class PictureInfo implements Parcelable {
             dateTime.setTimeInMillis(in.readLong());
             position = new Position(in.readDouble(), in.readDouble());
             individualName = in.readString();
-            individualSex = Sex.fromString(in.readString());
-            individualSpecies = Species.fromString(in.readString());
+            individualSex = SexEnum.fromString(in.readString());
+            individualSpecies = SpeciesEnum.fromString(in.readString());
             location = in.readParcelable(Location.class.getClassLoader());
         } catch (InvalidSexException | InvalidSpeciesException e) {
             e.printStackTrace();

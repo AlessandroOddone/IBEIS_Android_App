@@ -80,9 +80,10 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
             pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
             pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
 
+            IbeisImage image = null;
             try {
                 //upload image to IBEIS
-                IbeisImage image = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mFileName));
+                image = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mFileName));
 
                 //run animal detection for giraffes
                 List<IbeisAnnotation> imageAnnotations = ibeis.runAnimalDetection(image, Species.GIRAFFE);
@@ -120,8 +121,15 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
                     }
                 }
             } catch (Exception e) {//TODO handle exceptions
-                System.out.println("ERROR");
                 e.printStackTrace();
+            } finally {
+                if(image != null) {
+                    try {
+                        ibeis.deleteImage(image);
+                    } catch (Exception e) {//TODO handle exception
+                        e.printStackTrace();
+                    }
+                }
             }
             return pictureInfo;
         }

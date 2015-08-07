@@ -148,18 +148,13 @@ public class MyPictureDetailActivity extends ActionBarActivity {
     }
 
     public void displayPictureInfo(PictureInfo pictureInfo) {
-        System.out.println("displayPictureInfo");
-
         this.pictureInfo = pictureInfo;
 
         if(pictureInfo == null) {
-            System.out.println("pictureInfo == null");
             // TODO handle null pictureInfo
             return;
         }
         else {
-            System.out.println("pictureInfo != null");
-
             detailLayout.setVisibility(View.VISIBLE);
             detailProgressBar.setVisibility(View.GONE);
 

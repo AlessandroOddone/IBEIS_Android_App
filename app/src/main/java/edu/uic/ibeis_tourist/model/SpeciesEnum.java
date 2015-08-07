@@ -1,10 +1,9 @@
 package edu.uic.ibeis_tourist.model;
 
-import edu.uic.ibeis_java_api.values.Species;
 import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
 
 public enum SpeciesEnum {
-    GIRAFFE(Species.GIRAFFE.getValue()), UNKNOWN("N/A");
+    GIRAFFE("Giraffe"), UNKNOWN("N/A");
 
     private String value;
 

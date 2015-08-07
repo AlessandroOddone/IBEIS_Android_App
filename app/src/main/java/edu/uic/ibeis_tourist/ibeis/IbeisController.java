@@ -30,7 +30,7 @@ import edu.uic.ibeis_tourist.utils.ImageUtils;
 public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisInterface {
 
     private static final int BROOKFIELD_GIRAFFES_ENCOUNTER_ID = 99;
-    private static final int QUERY_RECOGNITION_THRESHOLD = 12;
+    private static final double QUERY_RECOGNITION_THRESHOLD = 12;
 
     @Override
     public void identifyIndividual(String fileName, Location location, Position position,
@@ -97,13 +97,16 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
                     for(IbeisIndividual i : ibeis.getEncounterById(BROOKFIELD_GIRAFFES_ENCOUNTER_ID).getIndividuals()) {
                         dbAnnotations.addAll(i.getAnnotations());
                     }
+
                     IbeisQueryResult queryResult = ibeis.query(queryAnnotation, dbAnnotations);
+                    System.out.println("QUERY RESULT: " + queryResult);
                     List<IbeisQueryScore> queryScores = queryResult.getScores();
 
                     //sort query scores from the highest to the lowest
                     Collections.sort(queryScores, Collections.reverseOrder());
                     //get the highest score
                     IbeisQueryScore highestScore = queryScores.get(0);
+                    System.out.println("HIGHEST SCORE: " + highestScore);
 
                     if(highestScore.getScore() > QUERY_RECOGNITION_THRESHOLD) {
                         IbeisIndividual individual = highestScore.getDbAnnotation().getIndividual();
@@ -117,6 +120,7 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
                     }
                 }
             } catch (Exception e) {//TODO handle exceptions
+                System.out.println("ERROR");
                 e.printStackTrace();
             }
             return pictureInfo;

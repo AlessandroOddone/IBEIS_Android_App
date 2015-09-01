@@ -52,7 +52,6 @@ public class MyPicturesActivity extends ActionBarActivity
 
     private CurrentFragment currentFragment;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

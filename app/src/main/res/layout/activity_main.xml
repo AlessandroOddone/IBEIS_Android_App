@@ -79,7 +79,7 @@
             android:drawableStart="@drawable/ic_my_pictures"
             android:drawableLeft="@drawable/ic_my_pictures"
             android:drawablePadding="@dimen/button_main_menu_drawable_padding"
-            android:onClick="gotoMyPictures"/>
+            android:onClick="gotoMyPicturesActivity"/>
     </LinearLayout>
 
 </RelativeLayout>

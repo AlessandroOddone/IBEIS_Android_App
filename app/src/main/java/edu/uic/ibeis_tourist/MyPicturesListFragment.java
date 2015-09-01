@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import edu.uic.ibeis_tourist.layout.DividerItemDecoration;
-import edu.uic.ibeis_tourist.layout.MyPicturesRecyclerViewAdapter;
+import edu.uic.ibeis_tourist.view.DividerItemDecoration;
+import edu.uic.ibeis_tourist.view.MyPicturesRecyclerViewAdapter;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 
@@ -38,9 +38,9 @@ public class MyPicturesListFragment extends Fragment {
 
     private Location location;
     private ArrayList<PictureInfo> pictureList;
+
     /**
      * Factory method to create a new instance of MyPicturesListFragment.
-     *
      * @return A new instance of fragment MyPicturesListFragment.
      */
     public static MyPicturesListFragment newInstance(ArrayList<PictureInfo> pictureList, Location location) {

@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import edu.uic.ibeis_tourist.MainActivity;
-import edu.uic.ibeis_tourist.MyPictureDetailActivity;
+import edu.uic.ibeis_tourist.PictureDetailActivity;
 import edu.uic.ibeis_tourist.MyPicturesActivity;
 import edu.uic.ibeis_tourist.exceptions.InvalidSexException;
 import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
@@ -184,8 +184,8 @@ public class LocalDatabase implements LocalDatabaseInterface {
 
             switch (activityName) {
                 case "MyPictureDetailActivity":
-                    MyPictureDetailActivity myPictureDetailActivity =
-                            (MyPictureDetailActivity) activity;
+                    PictureDetailActivity myPictureDetailActivity =
+                            (PictureDetailActivity) activity;
                     myPictureDetailActivity.displayPictureInfo(mPictureInfo);
             }
         }

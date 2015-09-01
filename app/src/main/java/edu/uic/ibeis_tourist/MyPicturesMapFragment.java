@@ -43,8 +43,7 @@ public class MyPicturesMapFragment extends Fragment {
     private ArrayList<PictureInfo> pictureList;
 
     /**
-     * Use this factory method to create a new instance of MyPicturesMapFragment
-     *
+     * Factory method to create a new instance of MyPicturesMapFragment
      * @return A new instance of fragment MyPicturesMapFragment.
      */
     public static MyPicturesMapFragment newInstance(ArrayList<PictureInfo> pictureList, Location location) {

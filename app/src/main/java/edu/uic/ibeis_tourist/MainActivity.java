@@ -307,29 +307,29 @@ public class MainActivity extends ActionBarActivity {
             // Unregister GPS events receiver
             unregisterReceiver(positionEventsReceiver);
 
-            gotToPictureDetail(imageFileName);
+            gotToAnnotatePictureActivity(imageFileName);
         }
     }
 
-    private void gotToPictureDetail(String pictureFileName) {
-        System.out.println("HomeActivity: gotToPictureDetailActivity");
+    private void gotToAnnotatePictureActivity(String pictureFileName) {
+        System.out.println("HomeActivity: gotToAnnotatePictureActivity");
 
-        Intent myPictureDetailIntent = new Intent(this, MyPictureDetailActivity.class);
-        myPictureDetailIntent.putExtra("callingActivity", ActivityEnum.MainActivity.getValue());
-        myPictureDetailIntent.putExtra("fileName", pictureFileName);
-        myPictureDetailIntent.putExtra("location", location);
-        myPictureDetailIntent.putExtra("position",
+        Intent annotatePictureActivityIntent = new Intent(this, AnnotatePictureActivity.class);
+        annotatePictureActivityIntent.putExtra("callingActivity", ActivityEnum.MainActivity.getValue());
+        annotatePictureActivityIntent.putExtra("fileName", pictureFileName);
+        annotatePictureActivityIntent.putExtra("location", location);
+        annotatePictureActivityIntent.putExtra("position",
                 (currentLatitude != null && currentLongitude != null && currentFacingDirection != null ?
                         new Position(currentLatitude, currentLongitude, currentFacingDirection) : null));
-        myPictureDetailIntent.putExtra("dateTime", new GregorianCalendar().getTimeInMillis());
+        annotatePictureActivityIntent.putExtra("dateTime", new GregorianCalendar().getTimeInMillis());
 
-        startActivity(myPictureDetailIntent);
+        startActivity(annotatePictureActivityIntent);
     }
 
-    public void gotoMyPictures(View v) {
-        Intent myPicturesIntent = new Intent(this, MyPicturesActivity.class);
-        //myPicturesIntent.putExtra("location", location);
-        startActivity(myPicturesIntent);
+    public void gotoMyPicturesActivity(View v) {
+        Intent myPicturesActivityIntent = new Intent(this, MyPicturesActivity.class);
+        //myPicturesActivityIntent.putExtra("location", location);
+        startActivity(myPicturesActivityIntent);
     }
 
     private void gpsEnabled() {

@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.uic.ibeis_tourist.MyPictureDetailActivity">
+    tools:context="edu.uic.ibeis_tourist.PictureDetailActivity">
 
     <include layout="@layout/toolbar_actionbar"
-        android:id="@+id/my_picture_detail_toolbar"/>
+        android:id="@+id/picture_detail_toolbar"/>
 
     <RelativeLayout
         android:id="@+id/detail_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/my_picture_detail_toolbar" >
+        android:layout_below="@+id/picture_detail_toolbar" >
 
         <ImageView
             android:id="@+id/detail_image_view"

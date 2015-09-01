@@ -1,4 +1,4 @@
-package edu.uic.ibeis_tourist.layout;
+package edu.uic.ibeis_tourist.view;
 
 import android.content.Context;
 import android.graphics.Canvas;

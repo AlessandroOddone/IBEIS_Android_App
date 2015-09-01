@@ -1,4 +1,4 @@
-package edu.uic.ibeis_tourist.layout;
+package edu.uic.ibeis_tourist.view;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.uic.ibeis_tourist.MyPictureDetailActivity;
+import edu.uic.ibeis_tourist.PictureDetailActivity;
 import edu.uic.ibeis_tourist.R;
 import edu.uic.ibeis_tourist.other.HackedTouchDelegate;
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
@@ -120,7 +120,7 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myPictureDetailIntent = new Intent(v.getContext(), MyPictureDetailActivity.class);
+                Intent myPictureDetailIntent = new Intent(v.getContext(), PictureDetailActivity.class);
                 myPictureDetailIntent.putExtra("pictureInfo", mPictureInfoList.get(position));
                 myPictureDetailIntent.putExtra("callingActivity", ActivityEnum.MyPicturesActivity.getValue());
                 v.getContext().startActivity(myPictureDetailIntent);

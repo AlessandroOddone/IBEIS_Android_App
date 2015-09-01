@@ -35,7 +35,7 @@ import edu.uic.ibeis_tourist.utils.ImageUtils;
 import edu.uic.ibeis_tourist.values.ActivityEnum;
 
 
-public class MyPictureDetailActivity extends ActionBarActivity {
+public class PictureDetailActivity extends ActionBarActivity {
 
     private static final String NOT_AVAILABLE = "N/A";
 
@@ -59,8 +59,8 @@ public class MyPictureDetailActivity extends ActionBarActivity {
         System.out.println("MyPictureDetailActivity: onCreate");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_picture_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_picture_detail_toolbar);
+        setContentView(R.layout.activity_picture_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.picture_detail_toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -132,7 +132,7 @@ public class MyPictureDetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_my_picture_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_picture_detail, menu);
         return true;
     }
 

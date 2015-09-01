@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="take_picture_button_text">TAKE A PICTURE\nPhotograph an encountered animal and learn more about it.</string>
     <string name="my_pictures_button_text">MY ENCOUNTERS\nVisualize all the Ibeis encounters you have experienced.</string>
+    <string name="action_go_ahead">GO AHEAD</string>
     <string name="gps_loading">Obtaining location...</string>
     <string name="gps_available">Location available</string>
     <string name="gps_not_enabled">GPS service not enabled</string>
@@ -24,5 +25,9 @@
     <string name="title_activity_my_picture_detail">Encounter</string>
     <string name="detail_individual_info_title">Individual</string>
     <string name="detail_location_title">Setting</string>
+    <string name="title_activity_take_picture">TakePictureActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

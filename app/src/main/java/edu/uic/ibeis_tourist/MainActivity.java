@@ -24,15 +24,14 @@ import android.widget.TextView;
 
 import java.util.GregorianCalendar;
 
-import edu.uic.ibeis_tourist.values.ActivityEnum;
-import edu.uic.ibeis_tourist.values.ActivityForResultRequest;
-import edu.uic.ibeis_tourist.values.PositionEvent;
 import edu.uic.ibeis_tourist.interfaces.LocalDatabaseInterface;
 import edu.uic.ibeis_tourist.local_database.LocalDatabase;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.Position;
 import edu.uic.ibeis_tourist.services.PositionService;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
+import edu.uic.ibeis_tourist.values.ActivityForResultRequest;
+import edu.uic.ibeis_tourist.values.PositionEvent;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -45,6 +44,8 @@ public class MainActivity extends ActionBarActivity {
     private static final String IMG_FILE_NAME = "imageFileName";
     private static final String LOCATION_DETECTED = "locationDetected";
     private static final String LOCATION = "location";
+
+    private Intent positionServiceIntent;
 
     private Location location;
 
@@ -109,7 +110,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("HomeActivity: onCreate");
+        //System.out.println("MainActivity: onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -140,59 +141,57 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected  void onStart() {
-        System.out.println("HomeActivity: onStart");
+        //System.out.println("MainActivity: onStart");
         super.onStart();
 
         if (!takingPicture) {
             // Register GPS events receiver
             registerReceiver(positionEventsReceiver, new IntentFilter("edu.uic.ibeis_tourist.broadcast_position_event"));
             // Start GPS Service
-            startService(new Intent(this, PositionService.class));
+            positionServiceIntent = new Intent(this, PositionService.class);
+            startService(positionServiceIntent);
         }
-
         takingPicture = false;
     }
 
     @Override
     protected void onResume() {
-        System.out.println("HomeActivity: onResume");
+        //System.out.println("MainActivity: onResume");
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        System.out.println("HomeActivity: onPause");
+        //System.out.println("MainActivity: onPause");
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        System.out.println("HomeActivity: onStop");
-
+        //System.out.println("MainActivity: onStop");
         if (!takingPicture) { // Check not interacting with camera app
 
+            // Stop GPS Service
+            stopService(positionServiceIntent);
             // Unregister GPS events receiver
             try {
                 unregisterReceiver(positionEventsReceiver);
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
-            // Stop GPS Service
-            stopService(new Intent(this, PositionService.class));
         }
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        System.out.println("HomeActivity: onDestroy");
+        //System.out.println("HomeActivity: onDestroy");
         super.onDestroy();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        System.out.println("HomeActivity: onSaveInstanceState");
-
+        //System.out.println("HomeActivity: onSaveInstanceState");
         outState.putString(CUR_LAT, currentLatitude!=null ? currentLatitude.toString() : null);
         outState.putString(CUR_LON, currentLongitude!=null ? currentLongitude.toString() : null);
         outState.putString(CUR_FACING_DIRECTION, currentFacingDirection!=null ? currentFacingDirection.toString() : null);
@@ -298,42 +297,47 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("HomeActivity: onActivityResult");
-
+        //System.out.println("MainActivity: onActivityResult");
         if (requestCode == ActivityForResultRequest.PICTURE_REQUEST.getValue() && resultCode == RESULT_OK) {
-
-            // Stop GPS Service
-            stopService(new Intent(this, PositionService.class));
-            // Unregister GPS events receiver
-            unregisterReceiver(positionEventsReceiver);
-
-            gotToAnnotatePictureActivity(imageFileName);
+            gotToAnnotatePicture(imageFileName);
         }
     }
 
-    private void gotToAnnotatePictureActivity(String pictureFileName) {
-        System.out.println("HomeActivity: gotToAnnotatePictureActivity");
+    private void gotToAnnotatePicture(String pictureFileName) {
+        //System.out.println("MainActivity: gotToAnnotatePictureActivity");
+        // Stop GPS Service
+        stopService(positionServiceIntent);
+        // Unregister GPS events receiver
+        try {
+            unregisterReceiver(positionEventsReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
 
-        Intent annotatePictureActivityIntent = new Intent(this, AnnotatePictureActivity.class);
-        annotatePictureActivityIntent.putExtra("callingActivity", ActivityEnum.MainActivity.getValue());
-        annotatePictureActivityIntent.putExtra("fileName", pictureFileName);
-        annotatePictureActivityIntent.putExtra("location", location);
-        annotatePictureActivityIntent.putExtra("position",
+        Intent annotatePictureIntent = new Intent(this, AnnotatePictureActivity.class);
+        annotatePictureIntent.putExtra("fileName", pictureFileName);
+        annotatePictureIntent.putExtra("location", location);
+        annotatePictureIntent.putExtra("position",
                 (currentLatitude != null && currentLongitude != null && currentFacingDirection != null ?
                         new Position(currentLatitude, currentLongitude, currentFacingDirection) : null));
-        annotatePictureActivityIntent.putExtra("dateTime", new GregorianCalendar().getTimeInMillis());
+        annotatePictureIntent.putExtra("dateTime", new GregorianCalendar().getTimeInMillis());
 
-        startActivity(annotatePictureActivityIntent);
+        startActivity(annotatePictureIntent);
     }
 
-    public void gotoMyPicturesActivity(View v) {
-        Intent myPicturesActivityIntent = new Intent(this, MyPicturesActivity.class);
+    public void gotoMyPictures(View v) {
+        //System.out.println("MainActivity: gotToMyPictures");
+        // Stop GPS Service
+        stopService(positionServiceIntent);
+        // Unregister GPS events receiver
+
+        Intent myPicturesIntent = new Intent(this, MyPicturesActivity.class);
         //myPicturesActivityIntent.putExtra("location", location);
-        startActivity(myPicturesActivityIntent);
+        startActivity(myPicturesIntent);
     }
 
     private void gpsEnabled() {
-        System.out.println("HomeActivity: gpsEnabled");
+        //System.out.println("MainActivity: gpsEnabled");
         gpsEnabled = true;
 
         findViewById(edu.uic.ibeis_tourist.R.id.position_progress_bar).setVisibility(View.VISIBLE);
@@ -341,7 +345,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void gpsDisabled() {
-        System.out.println("HomeActivity: gpsDisabled");
+        //System.out.println("MainActivity: gpsDisabled");
         gpsEnabled = false;
         currentLatitude = null;
         currentLongitude = null;
@@ -355,7 +359,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void locationChanged(double lat, double lon) {
-        System.out.println("HomeActivity: locationChanged");
+        //System.out.println("MainActivity: locationChanged");
         currentLatitude = lat;
         currentLongitude = lon;
 
@@ -374,7 +378,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void sensorChanged(float facing) {
-        //System.out.println("HomeActivity: sensorChanged");
+        //System.out.println("MainActivity: sensorChanged");
         currentFacingDirection = facing;
 
         if (locationDetected) {

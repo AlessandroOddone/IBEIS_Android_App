@@ -3,16 +3,23 @@ package edu.uic.ibeis_tourist.ibeis;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import java.util.GregorianCalendar;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import edu.uic.ibeis_java_api.api.Ibeis;
+import edu.uic.ibeis_java_api.api.IbeisAnnotation;
+import edu.uic.ibeis_java_api.api.IbeisImage;
+import edu.uic.ibeis_java_api.api.IbeisIndividual;
+import edu.uic.ibeis_java_api.api.IbeisQueryResult;
+import edu.uic.ibeis_java_api.api.IbeisQueryScore;
+import edu.uic.ibeis_java_api.values.Sex;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.local_database.LocalDatabase;
-import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
-import edu.uic.ibeis_tourist.model.Position;
 import edu.uic.ibeis_tourist.model.SexEnum;
-import edu.uic.ibeis_tourist.model.SpeciesEnum;
+import edu.uic.ibeis_tourist.utils.ImageUtils;
 
 
 public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisInterface {
@@ -21,11 +28,9 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
     private static final double QUERY_RECOGNITION_THRESHOLD = 12;
 
     @Override
-    public void identifyIndividual(String fileName, Location location, Position position,
-                                   GregorianCalendar dateTime, Context context) throws MatchNotFoundException {
-
-        System.out.println("IbeisController: Identify Individual");
-        new IdentifyIndividualAsyncTask(fileName, position, dateTime, location, context).execute();
+    public void identifyIndividual(PictureInfo pictureInfo, Context context) throws MatchNotFoundException {
+        //System.out.println("IbeisController: Identify Individual");
+        new IdentifyIndividualAsyncTask(pictureInfo, context).execute();
     }
 
     // AsyncTask classes implementation
@@ -34,52 +39,36 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
 
         private Ibeis ibeis;
 
-        private String mFileName;
-        private Location mLocation;
-        private Position mPosition;
-        private GregorianCalendar mDateTime;
+        private PictureInfo mPictureInfo;
         private Context mContext;
 
-        private IdentifyIndividualAsyncTask(String fileName, Position position, GregorianCalendar dateTime,
-                                            Location location, Context context) {
-
-            System.out.println("IdentifyIndividualAsyncTask");
-
+        private IdentifyIndividualAsyncTask(PictureInfo pictureInfo, Context context) {
+            //System.out.println("IdentifyIndividualAsyncTask");
             ibeis = new Ibeis();
-
-            mFileName = fileName;
-            mLocation = location;
-            mPosition = position;
-            mDateTime = dateTime;
+            mPictureInfo = pictureInfo;
             mContext = context;
         }
 
-        // TODO temporary implementation
         @Override
         protected PictureInfo doInBackground(Void... params) {
-            System.out.println("IbeisInterfaceImplementation: IdentifyIndividual AsyncTask");
-
-            PictureInfo pictureInfo = new PictureInfo();
-            pictureInfo.setFileName(mFileName);
-            pictureInfo.setLocation(mLocation);
-            pictureInfo.setPosition(mPosition);
-            pictureInfo.setDateTime(mDateTime);
-            pictureInfo.setIndividualName(null);
-            pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
-            pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
-
-            /*
+            //System.out.println("IbeisInterfaceImplementation: IdentifyIndividual AsyncTask");
             IbeisImage image = null;
             try {
-                //upload image to IBEIS
-                image = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mFileName));
+                //upload image and add annotation
+                IbeisAnnotation queryAnnotation = ibeis.addAnnotation(
+                        ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mPictureInfo.getFileName())),
+                                mPictureInfo.getAnnotationBbox());
 
-                //TODO: manual annotation
-                IbeisAnnotation queryAnnotation =;
+                System.out.println("IBEIS CONTROLLER -> BBOX = " + queryAnnotation.getBoundingBox());
 
                 List<IbeisAnnotation> dbAnnotations = new ArrayList<>();
-                for(IbeisIndividual i : ibeis.getEncounterById(BROOKFIELD_GIRAFFES_ENCOUNTER_ID).getIndividuals()) {
+                for(IbeisImage i : ibeis.getEncounterById(BROOKFIELD_GIRAFFES_ENCOUNTER_ID).getImages()) {
                     dbAnnotations.addAll(i.getAnnotations());
+                }
+
+                System.out.println("DB ANNOTATIONS:");
+                for(IbeisAnnotation a : dbAnnotations) {
+                    System.out.println("(" + a.getId() + ") " + a.getBoundingBox());
                 }
 
                 IbeisQueryResult queryResult = ibeis.query(queryAnnotation, dbAnnotations);
@@ -94,10 +83,10 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
 
                 if(highestScore.getScore() > QUERY_RECOGNITION_THRESHOLD) {
                     IbeisIndividual individual = highestScore.getDbAnnotation().getIndividual();
-                    pictureInfo.setIndividualName(individual.getName());
+                    mPictureInfo.setIndividualName(individual.getName());
 
                     Sex individualSex = individual.getSex();
-                    pictureInfo.setIndividualSex(
+                    mPictureInfo.setIndividualSex(
                             (individualSex == Sex.MALE) ? SexEnum.MALE :
                                     (individualSex == Sex.FEMALE) ? SexEnum.FEMALE :
                                             SexEnum.UNKNOWN);
@@ -113,15 +102,13 @@ public class IbeisController implements edu.uic.ibeis_tourist.interfaces.IbeisIn
                     }
                 }
             }
-            */
-            return pictureInfo;
+            return mPictureInfo;
         }
 
         @Override
         protected void onPostExecute(PictureInfo pictureInfo) {
+            //System.out.println("IdentifyIndividualAsyncTask: onPostExecute");
             super.onPostExecute(pictureInfo);
-
-            System.out.println("IdentifyIndividualAsyncTask: onPostExecute");
             LocalDatabase localDb = new LocalDatabase();
             localDb.addPicture(pictureInfo, mContext);
         }

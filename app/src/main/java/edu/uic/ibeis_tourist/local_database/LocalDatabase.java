@@ -183,10 +183,10 @@ public class LocalDatabase implements LocalDatabaseInterface {
             String activityName = activity.getClass().getSimpleName();
 
             switch (activityName) {
-                case "MyPictureDetailActivity":
-                    PictureDetailActivity myPictureDetailActivity =
+                case "PictureDetailActivity":
+                    PictureDetailActivity PictureDetailActivity =
                             (PictureDetailActivity) activity;
-                    myPictureDetailActivity.displayPictureInfo(mPictureInfo);
+                    PictureDetailActivity.displayPictureInfo(mPictureInfo);
             }
         }
     }

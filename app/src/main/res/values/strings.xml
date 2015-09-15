@@ -4,8 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="app_name">Ibeis</string>
     <string name="action_settings">Settings</string>
-    <string name="take_picture_button_text">TAKE A PICTURE\nPhotograph an encountered animal and learn more about it.</string>
-    <string name="my_pictures_button_text">MY ENCOUNTERS\nVisualize all the Ibeis encounters you have experienced.</string>
+    <string name="take_picture_button_text">TAKE A PICTURE\nPhotograph an animal to learn more about it.</string>
+    <string name="my_pictures_button_text">MY IBEIS ALBUM\nVisualize all your Ibeis pictures.</string>
     <string name="action_go_ahead">GO AHEAD</string>
     <string name="gps_loading">Obtaining location...</string>
     <string name="gps_available">Location available</string>
@@ -21,11 +21,11 @@
     <string name="obtaining_location_alert_message">Wait until Ibeis has obtained your location.</string>
     <string name="obtaining_location_alert_btn">Got it</string>
     <string name="title_activity_individual_recognition"></string>
-    <string name="title_activity_my_pictures">My Encounters</string>
-    <string name="title_activity_my_picture_detail">Encounter</string>
+    <string name="title_activity_my_pictures">My Pictures</string>
+    <string name="title_activity_my_picture_detail">Picture Detail</string>
     <string name="detail_individual_info_title">Individual</string>
     <string name="detail_location_title">Setting</string>
-    <string name="title_activity_take_picture">TakePictureActivity</string>
+    <string name="title_activity_annotate_picture">Select the animal</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

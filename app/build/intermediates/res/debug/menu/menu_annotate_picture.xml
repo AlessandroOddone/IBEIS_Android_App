@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="edu.uic.ibeis_tourist.AnnotatePictureActivity">
+    <item android:id="@+id/action_go_ahead"
+        android:icon="@drawable/ic_done"
+        app:showAsAction="ifRoom"
+        android:title="@null"/>
+</menu>
+<!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/menu/menu_annotate_picture.xml -->

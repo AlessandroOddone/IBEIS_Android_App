@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/btn_app_shape_pressed"
+        android:state_pressed="true" />
+    <item android:drawable="@drawable/btn_app_shape_default" />
+</selector>
+<!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/drawable/btn_app.xml -->

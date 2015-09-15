@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.GregorianCalendar;
 
+import edu.uic.ibeis_java_api.api.data.annotation.BoundingBox;
 import edu.uic.ibeis_tourist.exceptions.InvalidSexException;
 import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
 
@@ -16,6 +17,7 @@ public class PictureInfo implements Parcelable {
     private SpeciesEnum individualSpecies;
     private SexEnum individualSex;
     private Location location;
+    private BoundingBox annotationBbox;
 
     public PictureInfo() {}
 
@@ -75,6 +77,14 @@ public class PictureInfo implements Parcelable {
         this.individualSex = SexEnum.fromString(individualSex);
     }
 
+    public BoundingBox getAnnotationBbox() {
+        return annotationBbox;
+    }
+
+    public void setAnnotationBbox(BoundingBox annotationBbox) {
+        this.annotationBbox = annotationBbox;
+    }
+
     public Location getLocation() {
         return location;
     }
@@ -95,6 +105,18 @@ public class PictureInfo implements Parcelable {
             individualSex = SexEnum.fromString(in.readString());
             individualSpecies = SpeciesEnum.fromString(in.readString());
             location = in.readParcelable(Location.class.getClassLoader());
+
+            int x = in.readInt();
+            int y = in.readInt();
+            int w = in.readInt();
+            int h = in.readInt();
+            if (x!=-1 && y!=-1 && w!=-1 && h!=-1) {
+                annotationBbox = new BoundingBox(x, y, w, h);
+            }
+            else {
+                annotationBbox = null;
+            }
+
         } catch (InvalidSexException | InvalidSpeciesException e) {
             e.printStackTrace();
         }
@@ -115,6 +137,10 @@ public class PictureInfo implements Parcelable {
         dest.writeString(individualSex.asString());
         dest.writeString(individualSpecies.asString());
         dest.writeParcelable(location, 0);
+        dest.writeInt(annotationBbox != null ? annotationBbox.getX() : -1);
+        dest.writeInt(annotationBbox != null ? annotationBbox.getY() : -1);
+        dest.writeInt(annotationBbox != null ? annotationBbox.getW() : -1);
+        dest.writeInt(annotationBbox != null ? annotationBbox.getH() : -1);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

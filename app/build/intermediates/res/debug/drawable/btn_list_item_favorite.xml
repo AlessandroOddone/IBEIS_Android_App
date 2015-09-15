@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"
+        android:drawable="@drawable/btn_list_item_favorite_selected" />
+    <item android:state_focused="true"
+        android:drawable="@drawable/btn_list_item_favorite_selected" />
+    <item android:state_selected="true"
+        android:drawable="@drawable/btn_list_item_favorite_selected" />
+    <item android:drawable="@drawable/btn_list_item_favorite_normal" />
+</selector><!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/drawable/btn_list_item_favorite.xml -->

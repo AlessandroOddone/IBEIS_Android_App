@@ -82,34 +82,12 @@ public class ImageUtils {
     }
 
     /**
-     * Convert dp to px
-     * @param context
-     * @param dp
-     * @return
-     */
-    public static int dpToPx(Context context, int dp) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        return (int)((dp * displayMetrics.density) + 0.5);
-    }
-
-    /**
-     * Convert px to dp
-     * @param context
-     * @param px
-     * @return
-     */
-    public static int pxToDp(Context context, int px) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        return (int) ((px/displayMetrics.density)+0.5);
-    }
-
-    /**
      * Returns a bitmap from an image file contained in the app folder in the external memory (the shape of the image is not modified)
      * @param fileName
      * @return image Bitmap
      * @throws IOException
      */
-    private static Bitmap getBitmap(String fileName, int requestedHeight, int requestedWidth,
+    public static Bitmap getBitmap(String fileName, int requestedHeight, int requestedWidth,
                              Bitmap.Config colorConfig) throws IOException {
 
         String filePath = PATH_TO_IMAGE_FILE + fileName;
@@ -166,7 +144,7 @@ public class ImageUtils {
      * @param rectangularBitmap
      * @return Circular Bitmap
      */
-    private static Bitmap cropToCircle(Bitmap rectangularBitmap) {
+    public static Bitmap cropToCircle(Bitmap rectangularBitmap) {
         Bitmap output;
 
         if (rectangularBitmap.getWidth() > rectangularBitmap.getHeight()) {
@@ -196,5 +174,27 @@ public class ImageUtils {
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(rectangularBitmap, rect, rect, paint);
         return output;
+    }
+
+    /**
+     * Convert dp to px
+     * @param context
+     * @param dp
+     * @return
+     */
+    public static int dpToPx(Context context, int dp) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return (int)((dp * displayMetrics.density) + 0.5);
+    }
+
+    /**
+     * Convert px to dp
+     * @param context
+     * @param px
+     * @return
+     */
+    public static int pxToDp(Context context, int px) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return (int) ((px/displayMetrics.density)+0.5);
     }
 }

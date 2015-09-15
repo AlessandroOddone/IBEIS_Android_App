@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.GregorianCalendar;
 
 import edu.uic.ibeis_tourist.interfaces.LocalDatabaseInterface;
@@ -32,6 +34,7 @@ import edu.uic.ibeis_tourist.services.PositionService;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
 import edu.uic.ibeis_tourist.values.ActivityForResultRequest;
 import edu.uic.ibeis_tourist.values.PositionEvent;
+import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -112,6 +115,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //System.out.println("MainActivity: onCreate");
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         if (toolbar != null) {

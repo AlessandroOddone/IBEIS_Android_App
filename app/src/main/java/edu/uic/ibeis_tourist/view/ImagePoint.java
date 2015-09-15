@@ -16,7 +16,7 @@ public class ImagePoint extends Point {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         bitmap = BitmapFactory.decodeResource(context.getResources(), res);
-        radius = Math.sqrt(bitmap.getWidth()*bitmap.getWidth() + bitmap.getHeight()*bitmap.getHeight());
+        radius = Math.sqrt((bitmap.getWidth()/2)*(bitmap.getWidth()/2) + (bitmap.getHeight()/2)*(bitmap.getHeight()/2));
         this.set(x, y);
     }
 

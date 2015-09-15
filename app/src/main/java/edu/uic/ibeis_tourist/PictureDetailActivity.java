@@ -18,11 +18,9 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
-import edu.uic.ibeis_tourist.exceptions.UnexpectedCallingActivityException;
 import edu.uic.ibeis_tourist.ibeis.IbeisController;
 import edu.uic.ibeis_tourist.interfaces.IbeisInterface;
 import edu.uic.ibeis_tourist.model.Location;
@@ -81,51 +79,30 @@ public class PictureDetailActivity extends ActionBarActivity {
         detailProgressBar.setVisibility(View.VISIBLE);
 
         if(savedInstanceState != null) {
-            System.out.println("savedInstanceState != null");
-
+            //System.out.println("PictureDetailActivity: savedInstanceState != null");
             displayPictureInfo((PictureInfo)savedInstanceState.getParcelable("pictureInfo"));
         }
         else {
-            System.out.println("savedInstanceState == null");
-
+            //System.out.println("PictureDetailActivity: savedInstanceState == null");
             Intent intent = getIntent();
 
             int callingActivity = intent.getIntExtra("callingActivity", 0);
 
-            if(callingActivity == ActivityEnum.MainActivity.getValue()) {
-                System.out.println("calling activity: MainActivity");
-
-                Location location = intent.getParcelableExtra("location");
-                String fileName = intent.getStringExtra("fileName");
-
-                GregorianCalendar dateTime = new GregorianCalendar();
-                long timeInMillis = intent.getLongExtra("dateTime", 0);
-                if(timeInMillis != 0) {
-                    dateTime.setTimeInMillis(timeInMillis);
-                }
-                else {
-                    dateTime = null;
-                }
-
-                Position position = intent.getParcelableExtra("position");
+            if(callingActivity == ActivityEnum.AnnotatePictureActivity.getValue()) {
+                //System.out.println("PictureDetailActivity: calling activity: MainActivity");
+                pictureInfo = intent.getParcelableExtra("pictureInfo");
 
                 try {
                     ibeis = new IbeisController();
-                    ibeis.identifyIndividual(fileName, location, position, dateTime, this);
+                    ibeis.identifyIndividual(pictureInfo, this);
                 } catch (MatchNotFoundException e) {
                     // TODO handle match not found
                     e.printStackTrace();
                 }
             }
             else if(callingActivity == ActivityEnum.MyPicturesActivity.getValue()) {
-                System.out.println("calling activity: MyPicturesActivity");
-
+                //System.out.println("PictureDetailActivity: calling activity: MyPicturesActivity");
                 displayPictureInfo((PictureInfo) intent.getParcelableExtra("pictureInfo"));
-            }
-            else {
-                System.out.println("error: invalid calling activity");
-
-                new UnexpectedCallingActivityException().printStackTrace();
             }
         }
     }
@@ -148,8 +125,8 @@ public class PictureDetailActivity extends ActionBarActivity {
     }
 
     public void displayPictureInfo(PictureInfo pictureInfo) {
+        System.out.println("PictureDetailActivity: displayPictureInfo");
         this.pictureInfo = pictureInfo;
-
         if(pictureInfo == null) {
             // TODO handle null pictureInfo
             return;

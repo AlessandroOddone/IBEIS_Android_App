@@ -35,7 +35,6 @@
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -64,12 +63,15 @@
         </activity>
         <activity
             android:name=".AnnotatePictureActivity"
-            android:label="@string/title_activity_take_picture"
+            android:label="@string/title_activity_annotate_picture"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uic.ibeis_tourist.MainActivity" />
         </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="30f7761db8ced2d7e02895cf79177d073a8d5389" />
     </application>
 
 </manifest>

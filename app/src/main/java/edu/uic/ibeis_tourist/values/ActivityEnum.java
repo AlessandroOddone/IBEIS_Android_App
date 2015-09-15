@@ -2,7 +2,7 @@ package edu.uic.ibeis_tourist.values;
 
 public enum ActivityEnum {
 
-    MainActivity(1001), MyPicturesActivity(1002), MyPictureDetailActivity(1003);
+    MainActivity(1001), MyPicturesActivity(1002), AnnotatePictureActivity(1003), PictureDetailActivity(1004);
 
     private int value;
 

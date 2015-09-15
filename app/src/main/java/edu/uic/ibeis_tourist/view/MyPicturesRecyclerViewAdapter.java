@@ -2,8 +2,9 @@ package edu.uic.ibeis_tourist.view;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,9 @@ import java.util.List;
 
 import edu.uic.ibeis_tourist.PictureDetailActivity;
 import edu.uic.ibeis_tourist.R;
-import edu.uic.ibeis_tourist.other.HackedTouchDelegate;
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 import edu.uic.ibeis_tourist.model.PictureInfo;
+import edu.uic.ibeis_tourist.other.HackedTouchDelegate;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
 import edu.uic.ibeis_tourist.values.ActivityEnum;
@@ -34,11 +35,11 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
         public Resources resources;
 
         public View view;
-        public ImageView picture;
-        public TextView speciesText;
-        public TextView nameText;
-        public TextView locationText;
-        public TextView dateText;
+        public ImageView pictureImageView;
+        public TextView speciesTextView;
+        public TextView nameTextView;
+        public TextView locationTextView;
+        public TextView dateTextView;
         public ImageButton favoriteButton;
 
         public ViewHolder(View view) {
@@ -47,20 +48,60 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
 
             resources = view.getResources();
 
-            picture = (ImageView) view.findViewById(R.id.item_picture);
-            MyPicturesRecyclerViewAdapter.PICTURE_LAYOUT_HEIGHT = ImageUtils.dpToPx(view.getContext(), picture.getLayoutParams().height);
-            MyPicturesRecyclerViewAdapter.PICTURE_LAYOUT_WIDTH = ImageUtils.dpToPx(view.getContext(), picture.getLayoutParams().width);
+            pictureImageView = (ImageView) view.findViewById(R.id.item_picture);
+            MyPicturesRecyclerViewAdapter.PICTURE_LAYOUT_HEIGHT = ImageUtils.dpToPx(view.getContext(), pictureImageView.getLayoutParams().height);
+            MyPicturesRecyclerViewAdapter.PICTURE_LAYOUT_WIDTH = ImageUtils.dpToPx(view.getContext(), pictureImageView.getLayoutParams().width);
 
-            speciesText = (TextView) view.findViewById(R.id.item_individual_species);
-            nameText = (TextView) view.findViewById(R.id.item_individual_name);
-            locationText = (TextView) view.findViewById(R.id.item_location);
-            dateText = (TextView) view.findViewById(R.id.item_datetime);
+            speciesTextView = (TextView) view.findViewById(R.id.item_individual_species);
+            nameTextView = (TextView) view.findViewById(R.id.item_individual_name);
+            locationTextView = (TextView) view.findViewById(R.id.item_location);
+            dateTextView = (TextView) view.findViewById(R.id.item_datetime);
             favoriteButton = (ImageButton) view.findViewById(R.id.item_star_btn);
         }
     }
 
     public MyPicturesRecyclerViewAdapter(List<PictureInfo> pictureInfoList) {
         mPictureInfoList = pictureInfoList;
+    }
+
+    private class BitmapLoaderTask extends AsyncTask<Void, Void, Void> {
+
+        private ViewHolder mViewHolder;
+        private int mPosition;
+
+        private boolean bitmapLoaded = false;
+        private Bitmap bitmap;
+
+        public BitmapLoaderTask(ViewHolder viewHolder, int position) {
+            mViewHolder = viewHolder;
+            mPosition = position;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                bitmap = ImageUtils.getCircularBitmap(mPictureInfoList.get(mPosition).getFileName(),
+                        PICTURE_LAYOUT_HEIGHT, PICTURE_LAYOUT_WIDTH);
+                bitmapLoaded = true;
+            } catch (ImageLoadingException e) {
+                //System.out.println("imageLoadingException");
+                bitmapLoaded = false;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (bitmapLoaded) {
+                //System.out.println("position " + mPosition + ": bitmapLoaded = true");
+                displayImageBitmap(mViewHolder, bitmap);
+            }
+            else {
+                //System.out.println("position " + mPosition + ": bitmapLoaded = false");
+                displayNoImageAvailable(mViewHolder);
+            }
+
+        }
     }
 
     @Override
@@ -73,21 +114,9 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
     @Override
     public void onBindViewHolder(final MyPicturesRecyclerViewAdapter.ViewHolder viewHolder, final int position) {
 
-        try {
-            viewHolder.picture.setImageDrawable(null);
-            viewHolder.picture.setImageBitmap(
-                    ImageUtils.getCircularBitmap(mPictureInfoList.get(position).getFileName(),
-                            PICTURE_LAYOUT_HEIGHT, PICTURE_LAYOUT_WIDTH));
-        } catch (ImageLoadingException e) {
-            viewHolder.picture.setImageDrawable(null);
-            if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                viewHolder.picture.setBackgroundDrawable(viewHolder.resources.getDrawable(R.drawable.ic_no_img_available));
-            }
-            else {
-                viewHolder.picture.setBackground(viewHolder.resources.getDrawable(R.drawable.ic_no_img_available));
-            }
-            e.printStackTrace();
-        }
+        viewHolder.pictureImageView.setImageDrawable(viewHolder.resources.getDrawable(R.drawable.loading_image_circle));
+        new BitmapLoaderTask(viewHolder, position).execute();
+
         String species = mPictureInfoList.get(position).getIndividualSpecies().asString().toUpperCase();
         String name = mPictureInfoList.get(position).getIndividualName();
         String location = mPictureInfoList.get(position).getLocation().getName();
@@ -95,35 +124,35 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
                 (mPictureInfoList.get(position).getDateTime(), DateTimeUtils.DateFormat.DATE_ONLY);
 
         if(species == null) {
-            viewHolder.speciesText.setVisibility(View.GONE);
+            viewHolder.speciesTextView.setVisibility(View.GONE);
         }
         else {
-            viewHolder.speciesText.setVisibility(View.VISIBLE);
-            viewHolder.speciesText.setText(species);
+            viewHolder.speciesTextView.setVisibility(View.VISIBLE);
+            viewHolder.speciesTextView.setText(species);
         }
         if(name == null) {
-            viewHolder.nameText.setVisibility(View.GONE);
+            viewHolder.nameTextView.setVisibility(View.GONE);
         }
         else {
-            viewHolder.nameText.setVisibility(View.VISIBLE);
-            viewHolder.nameText.setText(name);
+            viewHolder.nameTextView.setVisibility(View.VISIBLE);
+            viewHolder.nameTextView.setText(name);
         }
         if(location == null) {
-            viewHolder.locationText.setVisibility(View.GONE);
+            viewHolder.locationTextView.setVisibility(View.GONE);
         }
         else {
-            viewHolder.locationText.setVisibility(View.VISIBLE);
-            viewHolder.locationText.setText("@" + location);
+            viewHolder.locationTextView.setVisibility(View.VISIBLE);
+            viewHolder.locationTextView.setText("@" + location);
         }
-        viewHolder.dateText.setText(date);
+        viewHolder.dateTextView.setText(date);
 
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myPictureDetailIntent = new Intent(v.getContext(), PictureDetailActivity.class);
-                myPictureDetailIntent.putExtra("pictureInfo", mPictureInfoList.get(position));
-                myPictureDetailIntent.putExtra("callingActivity", ActivityEnum.MyPicturesActivity.getValue());
-                v.getContext().startActivity(myPictureDetailIntent);
+                Intent pictureDetailIntent = new Intent(v.getContext(), PictureDetailActivity.class);
+                pictureDetailIntent.putExtra("callingActivity", ActivityEnum.MyPicturesActivity.getValue());
+                pictureDetailIntent.putExtra("pictureInfo", mPictureInfoList.get(position));
+                v.getContext().startActivity(pictureDetailIntent);
             }
         });
 
@@ -163,5 +192,25 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
     @Override
     public int getItemCount() {
         return mPictureInfoList.size();
+    }
+
+    public void displayImageBitmap(ViewHolder viewHolder, Bitmap imageBitmap) {
+        viewHolder.pictureImageView.setImageDrawable(null);
+        viewHolder.pictureImageView.setImageBitmap(imageBitmap);
+    }
+
+    public void displayNoImageAvailable(ViewHolder viewHolder) {
+        //System.out.println("displayNoImageAvailable");
+        /*
+        viewHolder.pictureImageView.setImageDrawable(null);
+        if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            System.out.println("position: " + viewHolder.getPosition());
+            viewHolder.pictureImageView.setBackgroundDrawable(viewHolder.resources.getDrawable(R.drawable.ic_no_img_available));
+        }
+        else {
+            System.out.println("position: " + viewHolder.getPosition());
+            viewHolder.pictureImageView.setBackground(viewHolder.resources.getDrawable(R.drawable.ic_no_img_available));
+        }
+        */
     }
 }

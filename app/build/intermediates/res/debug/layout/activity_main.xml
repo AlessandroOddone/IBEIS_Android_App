@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <include layout="@layout/toolbar_actionbar"
+        android:id="@+id/main_toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/position_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_toolbar"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/gps_loading"
+            android:textSize="15sp" />
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminateOnly="true"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        </ProgressBar>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/gps_info_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_toolbar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:textSize="15sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/detected_location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_toolbar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textSize="15sp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/take_picture"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_main_menu_height"
+            android:gravity="start|center_vertical"
+            android:textAlignment="gravity"
+            android:drawableStart="@drawable/ic_camera"
+            android:drawableLeft="@drawable/ic_camera"
+            android:drawablePadding="@dimen/button_main_menu_drawable_padding"
+            android:onClick="takePicture"/>
+        <Button
+            android:id="@+id/my_pictures"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_main_menu_height"
+            android:gravity="start|center_vertical"
+            android:textAlignment="gravity"
+            android:drawableStart="@drawable/ic_my_pictures"
+            android:drawableLeft="@drawable/ic_my_pictures"
+            android:drawablePadding="@dimen/button_main_menu_drawable_padding"
+            android:onClick="gotoMyPictures"/>
+    </LinearLayout>
+
+</RelativeLayout><!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/layout/activity_main.xml -->

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context=".TakePictureActivity"
+    android:background="@color/annotate_image_background">
+
+    <include layout="@layout/toolbar_actionbar"
+        android:id="@+id/annotate_picture_toolbar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:layout_below="@+id/annotate_picture_toolbar">
+
+        <edu.uic.ibeis_tourist.view.DragRectImageView
+            android:id="@+id/annotate_picture_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="50dp"
+            android:paddingBottom="50dp"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+<!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/layout/activity_annotate_picture.xml -->

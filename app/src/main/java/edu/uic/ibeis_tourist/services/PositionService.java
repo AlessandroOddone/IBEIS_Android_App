@@ -64,7 +64,7 @@ public class PositionService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         System.out.println("GPS service started");
-        return Service.START_STICKY;
+        return Service.START_NOT_STICKY;
     }
 
     @Override
@@ -77,6 +77,7 @@ public class PositionService extends Service {
     public void onDestroy() {
         System.out.println("GPS service destroyed");
         locationManager.removeUpdates(locationListener);
+        sensorManager.unregisterListener(sensorEventListener);
         super.onDestroy();
     }
 
@@ -131,6 +132,7 @@ public class PositionService extends Service {
     public class GeomagneticSensorListener implements SensorEventListener {
         @Override
         public void onSensorChanged(SensorEvent event) {
+            //System.out.println("GeomagneticSensorListener: onSensorChanged");
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
                 accelerometerValues = event.values;
 

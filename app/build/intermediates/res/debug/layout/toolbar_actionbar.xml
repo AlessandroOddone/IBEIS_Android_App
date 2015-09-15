@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="?actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_alignParentTop="true"
+    android:background="@color/primary"
+    android:gravity="center_vertical"
+    android:textAlignment="gravity"
+    style="@style/AppToolbarStyle"/>
+<!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/layout/toolbar_actionbar.xml -->

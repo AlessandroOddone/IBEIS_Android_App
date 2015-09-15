@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetTop="@dimen/button_inset_vertical_material"
+    android:insetBottom="@dimen/button_inset_vertical_material">
+    <shape android:shape="rectangle"
+        android:tint="?attr/colorButtonNormal">
+        <corners android:radius="@dimen/control_corner_material" />
+        <solid android:color="@color/primary_dark" />
+        <padding android:left="@dimen/button_padding_horizontal_material"
+            android:top="@dimen/button_padding_vertical_material"
+            android:right="@dimen/button_padding_horizontal_material"
+            android:bottom="@dimen/button_padding_vertical_material" />
+    </shape>
+</inset>
+<!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/drawable/btn_app_shape_pressed.xml -->

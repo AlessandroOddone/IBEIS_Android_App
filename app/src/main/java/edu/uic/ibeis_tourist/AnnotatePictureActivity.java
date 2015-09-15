@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import java.util.GregorianCalendar;
 
+import edu.uic.ibeis_java_api.api.data.annotation.BoundingBox;
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
@@ -18,14 +19,15 @@ import edu.uic.ibeis_tourist.model.Position;
 import edu.uic.ibeis_tourist.model.SexEnum;
 import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
-import edu.uic.ibeis_tourist.view.DragRectangleImageView;
+import edu.uic.ibeis_tourist.values.ActivityEnum;
+import edu.uic.ibeis_tourist.view.DragRectImageView;
 
 public class AnnotatePictureActivity extends ActionBarActivity {
 
     private static final String PICTURE_INFO = "pictureInfo";
     private static final String IMAGE_BITMAP = "imageBitmap";
 
-    private DragRectangleImageView annotatePictureImageView;
+    private DragRectImageView annotatePictureImageView;
 
     private PictureInfo pictureInfo;
     private Bitmap imageBitmap;
@@ -40,7 +42,7 @@ public class AnnotatePictureActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        annotatePictureImageView = (DragRectangleImageView)findViewById(R.id.annotate_picture_image_view);
+        annotatePictureImageView = (DragRectImageView)findViewById(R.id.annotate_picture_image_view);
 
         if(savedInstanceState != null) {
             pictureInfo = savedInstanceState.getParcelable(PICTURE_INFO);
@@ -59,7 +61,7 @@ public class AnnotatePictureActivity extends ActionBarActivity {
                 dateTime = null;
             }
 
-            PictureInfo pictureInfo = new PictureInfo();
+            pictureInfo = new PictureInfo();
             pictureInfo.setFileName(intent.getStringExtra("fileName"));
             pictureInfo.setLocation((Location) intent.getParcelableExtra("location"));
             pictureInfo.setPosition((Position) intent.getParcelableExtra("position"));
@@ -67,6 +69,7 @@ public class AnnotatePictureActivity extends ActionBarActivity {
             pictureInfo.setIndividualName(null);
             pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
             pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
+            pictureInfo.setAnnotationBbox(null);
 
             try {
                 annotatePictureImageView.setImageDrawable(null);
@@ -84,35 +87,48 @@ public class AnnotatePictureActivity extends ActionBarActivity {
                 }
             }
         }
+
+        if (annotatePictureImageView != null) {
+            annotatePictureImageView.setOnUpCallback(new DragRectImageView.OnUpCallback() {
+                @Override
+                public void onRectFinished(final BoundingBox boundingBox) {
+                    pictureInfo.setAnnotationBbox(boundingBox);
+                    System.out.println("BOUNDING BOX: " + pictureInfo.getAnnotationBbox());
+                }
+            });
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(PICTURE_INFO,pictureInfo);
-        outState.putParcelable(IMAGE_BITMAP,imageBitmap);
+        outState.putParcelable(PICTURE_INFO, pictureInfo);
+        outState.putParcelable(IMAGE_BITMAP, imageBitmap);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_annotate_picture, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_go_ahead) {
-            //TODO: go to Picture Detail
+            goToPictureDetail();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void goToPictureDetail() {
+        Intent pictureDetailIntent = new Intent(this, PictureDetailActivity.class);
+        pictureDetailIntent.putExtra("callingActivity", ActivityEnum.AnnotatePictureActivity.getValue());
+        pictureDetailIntent.putExtra("pictureInfo", pictureInfo);
+
+        startActivity(pictureDetailIntent);
     }
 }

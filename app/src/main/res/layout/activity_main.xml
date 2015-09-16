@@ -58,6 +58,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/buttons_main_menu_padding_top"
         android:layout_centerInParent="true"
         android:orientation="vertical">
         <Button

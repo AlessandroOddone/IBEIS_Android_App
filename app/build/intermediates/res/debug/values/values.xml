@@ -240,12 +240,13 @@
     <dimen name="button_inset_horizontal_material">@dimen/control_inset_material</dimen>
     <dimen name="button_inset_vertical_material">6dp</dimen>
     <dimen name="button_main_menu_drawable_padding">25dp</dimen>
-    <dimen name="button_main_menu_height">125dp</dimen>
-    <dimen name="button_main_menu_text_size_description">13dp</dimen>
-    <dimen name="button_main_menu_text_size_title">25dp</dimen>
+    <dimen name="button_main_menu_height">185dp</dimen>
+    <dimen name="button_main_menu_text_size_description">20dp</dimen>
+    <dimen name="button_main_menu_text_size_title">35dp</dimen>
     <dimen name="button_padding_horizontal_material">8dp</dimen>
     <dimen name="button_padding_vertical_material">@dimen/control_padding_material</dimen>
     <dimen name="button_pressed_z_material">4dp</dimen>
+    <dimen name="buttons_main_menu_padding_top">50dp</dimen>
     <dimen name="control_corner_material">2dp</dimen>
     <dimen name="control_inset_material">4dp</dimen>
     <dimen name="control_padding_material">4dp</dimen>
@@ -419,7 +420,7 @@ available. Please contact the developer for assistance.</string>
     <string name="gps_not_enabled">GPS service not enabled</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_world">Hello world!</string>
-    <string name="my_pictures_button_text">MY IBEIS ALBUM\nVisualize all your Ibeis pictures.</string>
+    <string name="my_pictures_button_text">MY IBEIS ALBUM\nVisualize all your Ibeis pictures</string>
     <string name="no_location_alert_btn">Got it</string>
     <string name="no_location_alert_message">Your current location is not supported by Ibeis.</string>
     <string name="no_location_alert_title">Invalid Location</string>
@@ -432,7 +433,7 @@ available. Please contact the developer for assistance.</string>
     <string name="store_picture_title">Save image</string>
     <!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="take_picture_button_text">TAKE A PICTURE\nPhotograph an animal to learn more about it.</string>
+    <string name="take_picture_button_text">TAKE A PICTURE\nPhotograph an animal to learn more about it</string>
     <string name="title_activity_annotate_picture">Select the animal</string>
     <string name="title_activity_individual_recognition"/>
     <string name="title_activity_my_picture_detail">Picture Detail</string>

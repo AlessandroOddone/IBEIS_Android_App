@@ -62,6 +62,8 @@ public class PictureDetailActivity extends ActionBarActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setIcon(R.drawable.ic_logo);
+            getSupportActionBar().setTitle(null);
         }
 
         detailLayout = (RelativeLayout) findViewById(R.id.detail_layout);

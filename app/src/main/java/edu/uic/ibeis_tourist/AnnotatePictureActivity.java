@@ -40,6 +40,8 @@ public class AnnotatePictureActivity extends ActionBarActivity {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setIcon(R.drawable.ic_logo);
+            getSupportActionBar().setTitle(null);
         }
 
         annotatePictureImageView = (DragRectImageView)findViewById(R.id.annotate_picture_image_view);

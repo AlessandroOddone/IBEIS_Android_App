@@ -6,10 +6,11 @@
     <dimen name="activity_horizontal_margin">6dp</dimen>
     <dimen name="activity_vertical_margin">6dp</dimen>
     <!-- Main menu buttons values. -->
-    <dimen name="button_main_menu_height">125dp</dimen>
+    <dimen name="buttons_main_menu_padding_top">50dp</dimen>
+    <dimen name="button_main_menu_height">185dp</dimen>
     <dimen name="button_main_menu_drawable_padding">25dp</dimen>
-    <dimen name="button_main_menu_text_size_title">25dp</dimen>
-    <dimen name="button_main_menu_text_size_description">13dp</dimen>
+    <dimen name="button_main_menu_text_size_title">35dp</dimen>
+    <dimen name="button_main_menu_text_size_description">20dp</dimen>
     <!-- List items values. -->
     <dimen name="list_item_species_text_size">16dp</dimen>
     <dimen name="list_item_name_text_size">15dp</dimen>

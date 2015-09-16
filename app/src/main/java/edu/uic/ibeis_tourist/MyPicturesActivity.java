@@ -60,6 +60,8 @@ public class MyPicturesActivity extends ActionBarActivity
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setIcon(R.drawable.ic_logo);
+            getSupportActionBar().setTitle(null);
         }
 
         if (savedInstanceState != null) {

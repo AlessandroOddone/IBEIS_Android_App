@@ -114,6 +114,7 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
     @Override
     public void onBindViewHolder(final MyPicturesRecyclerViewAdapter.ViewHolder viewHolder, final int position) {
 
+        viewHolder.pictureImageView.setImageDrawable(null);
         viewHolder.pictureImageView.setImageDrawable(viewHolder.resources.getDrawable(R.drawable.loading_image_circle));
         new BitmapLoaderTask(viewHolder, position).execute();
 

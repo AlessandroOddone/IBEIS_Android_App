@@ -12,11 +12,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import edu.uic.ibeis_tourist.MainActivity;
-import edu.uic.ibeis_tourist.PictureDetailActivity;
 import edu.uic.ibeis_tourist.MyPicturesActivity;
 import edu.uic.ibeis_tourist.exceptions.InvalidSexException;
 import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
-import edu.uic.ibeis_tourist.interfaces.LocalDatabaseInterface;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.LocationBounds;
 import edu.uic.ibeis_tourist.model.PictureInfo;
@@ -167,27 +165,6 @@ public class LocalDatabase implements LocalDatabaseInterface {
             db.close();
 
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void voidParam) {
-            if (mContext instanceof Activity) {
-                displayPictureInfo((Activity) mContext);
-            }
-        }
-
-        private void displayPictureInfo (Activity activity) {
-
-            System.out.println("AddPictureAsyncTask: displayPictureInfo");
-
-            String activityName = activity.getClass().getSimpleName();
-
-            switch (activityName) {
-                case "PictureDetailActivity":
-                    PictureDetailActivity PictureDetailActivity =
-                            (PictureDetailActivity) activity;
-                    PictureDetailActivity.displayPictureInfo(mPictureInfo);
-            }
         }
     }
 

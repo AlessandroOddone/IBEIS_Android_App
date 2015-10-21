@@ -26,6 +26,8 @@
     <string name="detail_individual_info_title">Individual</string>
     <string name="detail_location_title">Setting</string>
     <string name="title_activity_annotate_picture">Select the animal</string>
+    <string name="drawer_item_home">Home</string>
+    <string name="drawer_item_my_pictures">My Pictures</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

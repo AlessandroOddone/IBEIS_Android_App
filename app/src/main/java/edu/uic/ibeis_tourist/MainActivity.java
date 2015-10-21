@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.text.style.UnderlineSpan;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,23 +24,36 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.GregorianCalendar;
 
-import edu.uic.ibeis_tourist.interfaces.LocalDatabaseInterface;
+import edu.uic.ibeis_tourist.local_database.LocalDatabaseInterface;
 import edu.uic.ibeis_tourist.local_database.LocalDatabase;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.Position;
-import edu.uic.ibeis_tourist.services.PositionService;
+import edu.uic.ibeis_tourist.position_service.PositionService;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
-import edu.uic.ibeis_tourist.values.ActivityForResultRequest;
-import edu.uic.ibeis_tourist.values.PositionEvent;
+import edu.uic.ibeis_tourist.activity_enums.ActivityForResultRequestEnum;
+import edu.uic.ibeis_tourist.position_service.PositionEvent;
 import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends ActionBarActivity {
     private Button takePictureButton;
     private Button myPicturesButton;
+    private Toolbar toolbar;
+    private PrimaryDrawerItem homeDrawerItem;
+    private SecondaryDrawerItem myPicturesDrawerItem;
 
     private static final String CUR_LAT = "currentLatitude";
     private static final String CUR_LON = "currentLongitude";
@@ -91,6 +105,15 @@ public class MainActivity extends ActionBarActivity {
         }
     };
 
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setIcon(R.drawable.ic_logo);
+            getSupportActionBar().setTitle(null);
+        }
+    }
+
     private void setMenuButtonText(Button button, String text) {
         int i = text.indexOf('\n');
         Spannable spannableText = new SpannableString(text);
@@ -111,18 +134,54 @@ public class MainActivity extends ActionBarActivity {
         setMenuButtonText(myPicturesButton, getString(R.string.my_pictures_button_text));
     }
 
+    private void initNavigationDrawer() {
+        homeDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_home).withIcon(R.drawable.ic_home_drawer).withSetSelected(true);
+        myPicturesDrawerItem = new SecondaryDrawerItem().withName(R.string.drawer_item_my_pictures).withIcon(R.drawable.ic_my_pictures_drawer);
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.drawer_header_background)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("User").withEmail("user@ibeis.com").withIcon(getResources().getDrawable(R.drawable.ic_default_user))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        homeDrawerItem,
+                        new DividerDrawerItem(),
+                        myPicturesDrawerItem
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if(drawerItem.equals(myPicturesDrawerItem)) {
+                            gotoMyPictures();
+                        }
+                            return false;
+                    }
+                })
+                .build();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //System.out.println("MainActivity: onCreate");
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setIcon(R.drawable.ic_logo);
-            getSupportActionBar().setTitle(null);
-        }
+        initToolbar();
+        initNavigationDrawer();
         initMenuButtons();
 
         if (savedInstanceState != null && takingPicture) {
@@ -164,6 +223,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         //System.out.println("MainActivity: onResume");
         super.onResume();
+        homeDrawerItem.withSetSelected(true);
+        myPicturesDrawerItem.withSetSelected(false);
     }
 
     @Override
@@ -297,14 +358,14 @@ public class MainActivity extends ActionBarActivity {
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(ImageUtils.generateImageFile(imageFileName)));
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, ActivityForResultRequest.PICTURE_REQUEST.getValue());
+            startActivityForResult(takePictureIntent, ActivityForResultRequestEnum.PICTURE_REQUEST.getValue());
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //System.out.println("MainActivity: onActivityResult");
-        if (requestCode == ActivityForResultRequest.PICTURE_REQUEST.getValue() && resultCode == RESULT_OK) {
+        if (requestCode == ActivityForResultRequestEnum.PICTURE_REQUEST.getValue() && resultCode == RESULT_OK) {
             gotToAnnotatePicture(imageFileName);
         }
     }
@@ -332,6 +393,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void gotoMyPictures(View v) {
+        gotoMyPictures();
+    }
+
+    private void gotoMyPictures() {
         //System.out.println("MainActivity: gotToMyPictures");
         // Stop GPS Service
         stopService(positionServiceIntent);
@@ -356,10 +421,12 @@ public class MainActivity extends ActionBarActivity {
         currentLatitude = null;
         currentLongitude = null;
 
+        /*
         findViewById(edu.uic.ibeis_tourist.R.id.position_progress_bar).setVisibility(View.GONE);
         TextView gpsInfoText = (TextView) findViewById(R.id.gps_info_text);
         gpsInfoText.setText(getResources().getText(R.string.gps_not_enabled));
         gpsInfoText.setVisibility(View.VISIBLE);
+        */
         findViewById(R.id.detected_location_text).setVisibility(View.GONE);
         locationDetected = false;
     }
@@ -376,9 +443,11 @@ public class MainActivity extends ActionBarActivity {
         else {
             if (currentFacingDirection != null) {
                 findViewById(R.id.position_progress_bar).setVisibility(View.GONE);
+                /*
                 TextView gpsInfoText = (TextView) findViewById(R.id.gps_info_text);
                 gpsInfoText.setText(getResources().getText(R.string.gps_available));
                 gpsInfoText.setVisibility(View.VISIBLE);
+                */
             }
         }
     }
@@ -389,9 +458,11 @@ public class MainActivity extends ActionBarActivity {
 
         if (locationDetected) {
             findViewById(R.id.position_progress_bar).setVisibility(View.GONE);
+            /*
             TextView gpsInfoText = (TextView) findViewById(R.id.gps_info_text);
             gpsInfoText.setText(getResources().getText(R.string.gps_available));
             gpsInfoText.setVisibility(View.VISIBLE);
+            */
         }
     }
 
@@ -400,13 +471,18 @@ public class MainActivity extends ActionBarActivity {
         location = currentLocation;
 
         findViewById(R.id.position_progress_bar).setVisibility(View.GONE);
+        /*
         TextView gpsInfoText = (TextView) findViewById(R.id.gps_info_text);
         gpsInfoText.setText(getResources().getText(R.string.gps_available));
         gpsInfoText.setVisibility(View.VISIBLE);
+        */
 
         TextView detectedLocationText = (TextView) findViewById(R.id.detected_location_text);
         if (location != null) {
-            detectedLocationText.setText(currentLocation.getName());
+
+            SpannableString content = new SpannableString("@" + currentLocation.getName());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            detectedLocationText.setText(content);
             detectedLocationText.setVisibility(View.VISIBLE);
         }
         else {

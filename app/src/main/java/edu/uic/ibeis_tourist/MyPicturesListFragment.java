@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import edu.uic.ibeis_tourist.view.DividerItemDecoration;
-import edu.uic.ibeis_tourist.view.MyPicturesRecyclerViewAdapter;
+import edu.uic.ibeis_tourist.view_elements.DividerItemDecoration;
+import edu.uic.ibeis_tourist.view_elements.MyPicturesRecyclerViewAdapter;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 

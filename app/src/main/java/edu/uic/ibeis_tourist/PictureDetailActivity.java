@@ -16,13 +16,24 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.ibeis.IbeisController;
-import edu.uic.ibeis_tourist.interfaces.IbeisInterface;
+import edu.uic.ibeis_tourist.ibeis.IbeisInterface;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
@@ -30,7 +41,7 @@ import edu.uic.ibeis_tourist.model.SexEnum;
 import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
-import edu.uic.ibeis_tourist.values.ActivityEnum;
+import edu.uic.ibeis_tourist.activity_enums.ActivityEnum;
 
 
 public class PictureDetailActivity extends ActionBarActivity {
@@ -38,6 +49,10 @@ public class PictureDetailActivity extends ActionBarActivity {
     private static final String NOT_AVAILABLE = "N/A";
 
     private PictureInfo pictureInfo;
+
+    private Toolbar toolbar;
+    private PrimaryDrawerItem homeDrawerItem;
+    private SecondaryDrawerItem myPicturesDrawerItem;
 
     private RelativeLayout detailLayout;
     private ProgressBar detailProgressBar;
@@ -52,19 +67,65 @@ public class PictureDetailActivity extends ActionBarActivity {
 
     private IbeisInterface ibeis;
 
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.picture_detail_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setIcon(R.drawable.ic_logo);
+            getSupportActionBar().setTitle(null);
+        }
+    }
+
+    private void initNavigationDrawer() {
+        homeDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_home).withIcon(R.drawable.ic_home_drawer).withSetSelected(false);
+        myPicturesDrawerItem = new SecondaryDrawerItem().withName(R.string.drawer_item_my_pictures).withIcon(R.drawable.ic_my_pictures_drawer).withSetSelected(false);
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.drawer_header_background)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("User").withEmail("user@ibeis.com").withIcon(getResources().getDrawable(R.drawable.ic_default_user))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        homeDrawerItem,
+                        new DividerDrawerItem(),
+                        myPicturesDrawerItem
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if(drawerItem.equals(homeDrawerItem)) {
+                            gotoHome();
+                        }
+                        if(drawerItem.equals(myPicturesDrawerItem)) {
+                            gotoMyPictures();
+                        }
+                        return false;
+                    }
+                })
+                .build();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("MyPictureDetailActivity: onCreate");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.picture_detail_toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setIcon(R.drawable.ic_logo);
-            getSupportActionBar().setTitle(null);
-        }
+        initToolbar();
+        initNavigationDrawer();
 
         detailLayout = (RelativeLayout) findViewById(R.id.detail_layout);
         detailProgressBar = (ProgressBar) findViewById(R.id.detail_progress_bar);
@@ -107,6 +168,13 @@ public class PictureDetailActivity extends ActionBarActivity {
                 displayPictureInfo((PictureInfo) intent.getParcelableExtra("pictureInfo"));
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        homeDrawerItem.withSetSelected(false);
+        myPicturesDrawerItem.withSetSelected(false);
     }
 
     @Override
@@ -176,8 +244,20 @@ public class PictureDetailActivity extends ActionBarActivity {
         Spannable spannableText = new SpannableString(text);
         spannableText.setSpan(new TextAppearanceSpan(this, R.style.PictureDetailAttributeTitle), 0, i+1,
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        spannableText.setSpan(new TextAppearanceSpan(this, R.style.PictureDetailAttributeValue), i+1, text.length(),
+        spannableText.setSpan(new TextAppearanceSpan(this, R.style.PictureDetailAttributeValue), i + 1, text.length(),
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spannableText);
     }
+
+    private void gotoHome() {
+        homeDrawerItem.withSetSelected(false);
+        myPicturesDrawerItem.withSetSelected(false);
+
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
+    private void gotoMyPictures() {
+        startActivity(new Intent(this, MyPicturesActivity.class));
+    }
+
 }

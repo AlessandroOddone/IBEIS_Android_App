@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="23" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,6 +21,14 @@
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" /> <!-- Permissions required for GCM -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" /> <!-- Optional permission for App measurement to run. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
         android:allowBackup="true"
@@ -54,36 +62,46 @@
 
         <activity
             android:name="edu.uic.ibeis_tourist.MyPicturesActivity"
-            android:label="@string/title_activity_my_pictures"
-            android:parentActivityName="edu.uic.ibeis_tourist.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.uic.ibeis_tourist.MainActivity" />
+            android:label="@string/title_activity_my_pictures" >
         </activity>
         <activity
             android:name="edu.uic.ibeis_tourist.PictureDetailActivity"
-            android:label="@string/title_activity_my_picture_detail"
-            android:parentActivityName="edu.uic.ibeis_tourist.MyPicturesActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.uic.ibeis_tourist.MyPicturesActivity" />
+            android:label="@string/title_activity_my_picture_detail" >
         </activity>
         <activity
             android:name="edu.uic.ibeis_tourist.AnnotatePictureActivity"
-            android:label="@string/title_activity_annotate_picture"
-            android:parentActivityName="edu.uic.ibeis_tourist.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.uic.ibeis_tourist.MainActivity" />
+            android:label="@string/title_activity_annotate_picture" >
         </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="30f7761db8ced2d7e02895cf79177d073a8d5389" />
-
+        <!-- Include the AdActivity and InAppPurchaseActivity configChanges and themes. -->
         <activity
-            android:name="android.support.v7.widget.TestActivity"
-            android:label="RecyclerViewTestActivity" />
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name="com.google.android.gms.ads.purchase.InAppPurchaseActivity"
+            android:theme="@style/Theme.IAPTheme" />
+
+        <provider
+            android:name="com.google.android.gms.measurement.AppMeasurementContentProvider"
+            android:authorities="edu.uic.ibeis_tourist.google_measurement_service"
+            android:exported="false" />
+
+        <receiver
+            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.measurement.UPLOAD" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.google.android.gms.measurement.AppMeasurementService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

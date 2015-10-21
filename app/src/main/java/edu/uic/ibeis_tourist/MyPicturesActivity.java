@@ -12,10 +12,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uic.ibeis_tourist.interfaces.LocalDatabaseInterface;
+import edu.uic.ibeis_tourist.local_database.LocalDatabaseInterface;
 import edu.uic.ibeis_tourist.local_database.LocalDatabase;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
@@ -23,6 +34,10 @@ import edu.uic.ibeis_tourist.model.PictureInfo;
 
 public class MyPicturesActivity extends ActionBarActivity
         implements MyPicturesListFragment.OnListFragmentInteractionListener, MyPicturesMapFragment.OnMapFragmentInteractionListener {
+
+    private Toolbar toolbar;
+    private PrimaryDrawerItem homeDrawerItem;
+    private SecondaryDrawerItem myPicturesDrawerItem;
 
     private static final String LOCATION = "location";
     private static final String PICTURE_LIST = "pictureList";
@@ -52,17 +67,60 @@ public class MyPicturesActivity extends ActionBarActivity
 
     private CurrentFragment currentFragment;
 
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.my_pictures_toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setIcon(R.drawable.ic_logo);
+            getSupportActionBar().setTitle(null);
+        }
+    }
+
+    private void initNavigationDrawer() {
+        homeDrawerItem = new PrimaryDrawerItem().withName(R.string.drawer_item_home).withIcon(R.drawable.ic_home_drawer).withSetSelected(false);
+        myPicturesDrawerItem = new SecondaryDrawerItem().withName(R.string.drawer_item_my_pictures).withIcon(R.drawable.ic_my_pictures_drawer).withSetSelected(true);
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.drawer_header_background)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("User").withEmail("user@ibeis.com").withIcon(getResources().getDrawable(R.drawable.ic_default_user))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        homeDrawerItem,
+                        new DividerDrawerItem(),
+                        myPicturesDrawerItem
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        if(drawerItem.equals(homeDrawerItem)) {
+                            gotoHome();
+                        }
+                        return false;
+                    }
+                })
+                .build();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_pictures);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.my_pictures_toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setIcon(R.drawable.ic_logo);
-            getSupportActionBar().setTitle(null);
-        }
+        initToolbar();
+        initNavigationDrawer();
 
         if (savedInstanceState != null) {
             location = savedInstanceState.getParcelable(LOCATION);
@@ -100,6 +158,13 @@ public class MyPicturesActivity extends ActionBarActivity
         else {
             localDb.getAllPicturesAtLocation(location.getId(), this);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        homeDrawerItem.withSetSelected(false);
+        myPicturesDrawerItem.withSetSelected(true);
     }
 
     @Override
@@ -217,4 +282,7 @@ public class MyPicturesActivity extends ActionBarActivity
         findViewById(R.id.my_pictures_container).setVisibility(View.VISIBLE);
     }
 
+    private void gotoHome() {
+        startActivity(new Intent(this, MainActivity.class));
+    }
 }

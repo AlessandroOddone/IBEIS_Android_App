@@ -20,7 +20,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -40,34 +40,22 @@
         </activity>
 
         <service
-            android:name=".services.PositionService"
+            android:name=".position_service.PositionService"
             android:enabled="true"
             android:exported="true" >
         </service>
 
         <activity
             android:name=".MyPicturesActivity"
-            android:label="@string/title_activity_my_pictures"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.uic.ibeis_tourist.MainActivity" />
+            android:label="@string/title_activity_my_pictures">
         </activity>
         <activity
             android:name=".PictureDetailActivity"
-            android:label="@string/title_activity_my_picture_detail"
-            android:parentActivityName=".MyPicturesActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.uic.ibeis_tourist.MyPicturesActivity" />
+            android:label="@string/title_activity_my_picture_detail">
         </activity>
         <activity
             android:name=".AnnotatePictureActivity"
-            android:label="@string/title_activity_annotate_picture"
-            android:parentActivityName=".MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.uic.ibeis_tourist.MainActivity" />
+            android:label="@string/title_activity_annotate_picture">
         </activity>
         <meta-data
             android:name="io.fabric.ApiKey"

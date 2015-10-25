@@ -11,6 +11,7 @@ import edu.uic.ibeis_java_api.api.IbeisImage;
 import edu.uic.ibeis_java_api.api.IbeisIndividual;
 import edu.uic.ibeis_java_api.values.Sex;
 import edu.uic.ibeis_tourist.PictureDetailActivity;
+import edu.uic.ibeis_tourist.R;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.local_database.LocalDatabase;
 import edu.uic.ibeis_tourist.model.PictureInfo;
@@ -52,7 +53,8 @@ public class IbeisController implements IbeisInterface {
                 image = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mPictureInfo.getFileName()));
                 IbeisAnnotation queryAnnotation = ibeis.addAnnotation(image, mPictureInfo.getAnnotationBbox());
 
-                QueryAlgorithmResult queryAlgorithmResult = new QueryAlgorithm(queryAnnotation, QueryAlgorithmType.BEST_SCORE).execute();
+                QueryAlgorithmResult queryAlgorithmResult = new QueryAlgorithm(mContext.getResources().openRawResource(R.raw.giraffe_db_hash_map))
+                        .query(queryAnnotation);
                 IbeisIndividual resultIndividual = queryAlgorithmResult.getIndividual();
                 SpeciesEnum species = queryAlgorithmResult.getSpecies();
                 if(resultIndividual != null) {

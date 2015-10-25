@@ -290,7 +290,7 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:38:17
 	android:name
 		ADDED from AndroidManifest.xml:38:27
-service#edu.uic.ibeis_tourist.services.PositionService
+service#edu.uic.ibeis_tourist.position_service.PositionService
 ADDED from AndroidManifest.xml:42:9
 	android:exported
 		ADDED from AndroidManifest.xml:45:13

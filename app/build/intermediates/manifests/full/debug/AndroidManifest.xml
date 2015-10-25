@@ -55,7 +55,7 @@
         </activity>
 
         <service
-            android:name="edu.uic.ibeis_tourist.services.PositionService"
+            android:name="edu.uic.ibeis_tourist.position_service.PositionService"
             android:enabled="true"
             android:exported="true" >
         </service>

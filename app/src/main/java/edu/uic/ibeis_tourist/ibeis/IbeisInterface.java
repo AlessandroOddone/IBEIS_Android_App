@@ -15,5 +15,5 @@ public interface IbeisInterface {
      * @param context Context from which the method is called
      * @throws MatchNotFoundException
      */
-    public void identifyIndividual(PictureInfo pictureInfo, Context context) throws MatchNotFoundException;
+    void identifyIndividual(PictureInfo pictureInfo, Context context) throws MatchNotFoundException;
 }

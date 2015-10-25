@@ -2995,7 +2995,8 @@ containing a value of this type.
     }
     public static final class raw {
         public static final int giraffe_db_hash_map=0x7f050000;
-        public static final int gtm_analytics=0x7f050001;
+        public static final int giraffe_db_ids_list=0x7f050001;
+        public static final int gtm_analytics=0x7f050002;
     }
     public static final class string {
         public static final int abc_action_bar_home_description=0x7f060001;

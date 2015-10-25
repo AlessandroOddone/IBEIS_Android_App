@@ -1,5 +1,6 @@
 package edu.uic.ibeis_tourist.ibeis;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,13 +78,22 @@ public class QueryAlgorithm {
 
     private Ibeis ibeis = new Ibeis();
     private HashMap<Long, AnnotationDbElement> annotationDbElementsHashMap;
+    private List<IbeisAnnotation> dbAnnotations;
 
-    public QueryAlgorithm(InputStream annotationDbElementsJsonFileInputStream) {
-        readAnnotationDbElementsMapFromJsonFile(annotationDbElementsJsonFileInputStream);
+    public QueryAlgorithm(InputStream annotationDbElementsHashMapJsonFileInputStream)
+            throws IOException, BadHttpRequestException, UnsuccessfulHttpRequestException {
+        readAnnotationDbElementsMapFromJsonFile(annotationDbElementsHashMapJsonFileInputStream);
+        getDbAnnotationsListFromHashMap();
+    }
+
+    public QueryAlgorithm(InputStream annotationDbElementsHashMapJsonFileInputStream, InputStream dbAnnotationListJsonFileInputStream)
+            throws IOException, BadHttpRequestException, UnsuccessfulHttpRequestException {
+        readAnnotationDbElementsMapFromJsonFile(annotationDbElementsHashMapJsonFileInputStream);
+        readDbAnnotationListFromJsonFile(dbAnnotationListJsonFileInputStream);
     }
 
     public QueryAlgorithmResult query(IbeisAnnotation queryAnnotation) throws IOException, BadHttpRequestException, UnsuccessfulHttpRequestException {
-        IbeisQueryResult queryResult = ibeis.query(queryAnnotation, getDbAnnotations());
+        IbeisQueryResult queryResult = ibeis.query(queryAnnotation, dbAnnotations);
         List<IbeisQueryScore> queryScores = queryResult.getScores();
         System.out.println("QUERY RESULT: " + queryResult);
 
@@ -124,11 +135,29 @@ public class QueryAlgorithm {
         }
     }
 
-    private List<IbeisAnnotation> getDbAnnotations() throws IOException, BadHttpRequestException, UnsuccessfulHttpRequestException {
+    private void readDbAnnotationListFromJsonFile(InputStream dbAnnotationListJsonFileInputStream) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(dbAnnotationListJsonFileInputStream));
+            IbeisAnnotation[] dbAnnotationsArray = new Gson().fromJson(reader.readLine(), IbeisAnnotation[].class);
+            dbAnnotations = Arrays.asList(dbAnnotationsArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private void getDbAnnotationsListFromHashMap() throws IOException, BadHttpRequestException, UnsuccessfulHttpRequestException {
         List<IbeisAnnotation> dbAnnotations = new ArrayList<>();
         for(AnnotationDbElement e : annotationDbElementsHashMap.values()) {
             dbAnnotations.add(e.getAnnotation());
         }
-        return dbAnnotations;
+        this.dbAnnotations = dbAnnotations;
     }
 }

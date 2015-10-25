@@ -53,7 +53,9 @@ public class IbeisController implements IbeisInterface {
                 image = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mPictureInfo.getFileName()));
                 IbeisAnnotation queryAnnotation = ibeis.addAnnotation(image, mPictureInfo.getAnnotationBbox());
 
-                QueryAlgorithmResult queryAlgorithmResult = new QueryAlgorithm(mContext.getResources().openRawResource(R.raw.giraffe_db_hash_map))
+                QueryAlgorithmResult queryAlgorithmResult = new QueryAlgorithm(
+                        mContext.getResources().openRawResource(R.raw.giraffe_db_hash_map),
+                        mContext.getResources().openRawResource(R.raw.giraffe_db_ids_list))
                         .query(queryAnnotation);
                 IbeisIndividual resultIndividual = queryAlgorithmResult.getIndividual();
                 SpeciesEnum species = queryAlgorithmResult.getSpecies();

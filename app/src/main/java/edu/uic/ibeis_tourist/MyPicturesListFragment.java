@@ -36,7 +36,6 @@ public class MyPicturesListFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private Location location;
     private ArrayList<PictureInfo> pictureList;
 
     /**
@@ -84,7 +83,7 @@ public class MyPicturesListFragment extends Fragment {
         mRecyclerView.scrollToPosition(0);
 
         // set adapter for the Recycler View, passing pictureList as parameter
-        mAdapter = new MyPicturesRecyclerViewAdapter(pictureList);
+        mAdapter = new MyPicturesRecyclerViewAdapter(pictureList, getActivity());
         mRecyclerView.setAdapter(mAdapter);
         mListener.onListReady();
 

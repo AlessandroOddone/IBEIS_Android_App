@@ -27,6 +27,14 @@ public class ImageUtils {
             + File.separator + "IBEIS" + File.separator;
 
     /**
+     * Return the folder where the images are stored
+     * @return
+     */
+    public static String getImagesMainFolder() {
+        return PATH_TO_IMAGE_FILE;
+    }
+
+    /**
      * Generate a unique file path for a new image file to be stored in the external memory
      * @return Generated file
      */
@@ -42,7 +50,7 @@ public class ImageUtils {
      * Generate a unique name for an image file
      * @return Name of the file
      */
-    public static String generateImageName() {
+        public static String generateImageUniqueName() {
         return "IBEIS_" + new SimpleDateFormat("yyyyMMdd'_'hhmmss").format(new Date()) + ".png";
     }
 
@@ -57,7 +65,7 @@ public class ImageUtils {
      */
     public static Bitmap getRectangularBitmap(String fileName, int containerHeight, int containerWidth) throws ImageLoadingException {
         try {
-            return getBitmap(fileName, containerHeight, containerWidth, Bitmap.Config.ARGB_8888);
+            return getBitmap(fileName, containerHeight, containerWidth);
         } catch (IOException e) {
             throw new ImageLoadingException();
         }
@@ -74,7 +82,7 @@ public class ImageUtils {
      */
     public static Bitmap getCircularBitmap(String fileName, int containerHeight, int containerWidth) throws ImageLoadingException {
         try {
-            Bitmap rectangularBitmap = getBitmap(fileName, containerHeight, containerWidth, Bitmap.Config.ARGB_8888);
+            Bitmap rectangularBitmap = getBitmap(fileName, containerHeight, containerWidth);
             return cropToCircle(rectangularBitmap);
         } catch (IOException e) {
             throw new ImageLoadingException();
@@ -87,8 +95,7 @@ public class ImageUtils {
      * @return image Bitmap
      * @throws IOException
      */
-    public static Bitmap getBitmap(String fileName, int requestedHeight, int requestedWidth,
-                             Bitmap.Config colorConfig) throws IOException {
+    public static Bitmap getBitmap(String fileName, int requestedHeight, int requestedWidth) throws IOException {
 
         String filePath = PATH_TO_IMAGE_FILE + fileName;
         if (!(new File(filePath)).exists()) {
@@ -101,25 +108,19 @@ public class ImageUtils {
 
         final int height = options.outHeight;
         final int width = options.outWidth;
-
-        options.inPreferredConfig = colorConfig;
         int inSampleSize = 1;
+        if (height > requestedHeight || width > requestedWidth) {
 
-        if (height > requestedHeight)
-        {
-            inSampleSize = Math.round((float)height / (float)requestedHeight);
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            while ((halfHeight / inSampleSize) > requestedHeight
+                    && (halfWidth / inSampleSize) > requestedWidth) {
+                inSampleSize *= 2;
+            }
         }
-        int expectedWidth = width / inSampleSize;
-
-        if (expectedWidth > requestedWidth)
-        {
-            inSampleSize = Math.round((float)width / (float)requestedWidth);
-        }
-
         options.inSampleSize = inSampleSize;
-
         options.inJustDecodeBounds = false;
-
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
 
         ExifInterface exif = new ExifInterface(filePath);
@@ -142,7 +143,7 @@ public class ImageUtils {
     /**
      * Crops a rectangular bitmap to generate a circular bitmap
      * @param rectangularBitmap
-     * @return Circular Bitmap
+     * @return circular Bitmap
      */
     public static Bitmap cropToCircle(Bitmap rectangularBitmap) {
         Bitmap output;

@@ -352,7 +352,7 @@ public class MainActivity extends ActionBarActivity {
 
         takingPicture = true;
 
-        imageFileName = ImageUtils.generateImageName();
+        imageFileName = ImageUtils.generateImageUniqueName();
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(ImageUtils.generateImageFile(imageFileName)));

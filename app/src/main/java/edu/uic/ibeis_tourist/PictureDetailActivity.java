@@ -1,7 +1,6 @@
 package edu.uic.ibeis_tourist;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -26,11 +25,13 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
-import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
+import edu.uic.ibeis_tourist.activity_enums.ActivityEnum;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.ibeis.IbeisController;
 import edu.uic.ibeis_tourist.ibeis.IbeisInterface;
@@ -41,7 +42,6 @@ import edu.uic.ibeis_tourist.model.SexEnum;
 import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
-import edu.uic.ibeis_tourist.activity_enums.ActivityEnum;
 
 
 public class PictureDetailActivity extends ActionBarActivity {
@@ -54,7 +54,7 @@ public class PictureDetailActivity extends ActionBarActivity {
     private PrimaryDrawerItem homeDrawerItem;
     private SecondaryDrawerItem myPicturesDrawerItem;
 
-    private RelativeLayout detailLayout;
+    private LinearLayout detailLayout;
     private ProgressBar detailProgressBar;
 
     private ImageView detailImageView;
@@ -127,7 +127,7 @@ public class PictureDetailActivity extends ActionBarActivity {
         initToolbar();
         initNavigationDrawer();
 
-        detailLayout = (RelativeLayout) findViewById(R.id.detail_layout);
+        detailLayout = (LinearLayout) findViewById(R.id.detail_layout);
         detailProgressBar = (ProgressBar) findViewById(R.id.detail_progress_bar);
 
         detailImageView = (ImageView) findViewById(R.id.detail_image_view);
@@ -205,11 +205,22 @@ public class PictureDetailActivity extends ActionBarActivity {
             detailLayout.setVisibility(View.VISIBLE);
             detailProgressBar.setVisibility(View.GONE);
 
+            Picasso.with(this)
+                    .load(new File((ImageUtils.getImagesMainFolder() + pictureInfo.getFileName())))
+                    .error(R.drawable.ic_no_img_available)
+                    .fit()
+                    .centerInside()
+                    .into(detailImageView);
+            /*
             try {
                 detailImageView.setImageDrawable(null);
-                detailImageView.setImageBitmap(ImageUtils.getRectangularBitmap(pictureInfo.getFileName(),
+                detailImageView.setImageBitmap (
+                        ImageUtils.getRectangularBitmap (
+                        pictureInfo.getFileName(),
                         ImageUtils.dpToPx(this, detailImageView.getLayoutParams().height),
-                        ImageUtils.dpToPx(this, detailImageView.getLayoutParams().width)));
+                        ImageUtils.dpToPx(this, detailImageView.getLayoutParams().width)
+                        )
+                );
             } catch (ImageLoadingException e) {
                 detailImageView.setImageDrawable(null);
                 if(android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
@@ -219,6 +230,7 @@ public class PictureDetailActivity extends ActionBarActivity {
                     detailImageView.setBackground(getResources().getDrawable(R.drawable.ic_no_img_available));
                 }
             }
+            */
 
             SpeciesEnum species = pictureInfo.getIndividualSpecies();
             String name = pictureInfo.getIndividualName();

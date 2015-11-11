@@ -108,19 +108,23 @@ public class ImageUtils {
 
         final int height = options.outHeight;
         final int width = options.outWidth;
+
         int inSampleSize = 1;
-        if (height > requestedHeight || width > requestedWidth) {
-
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) > requestedHeight
-                    && (halfWidth / inSampleSize) > requestedWidth) {
-                inSampleSize *= 2;
-            }
+        if (height > requestedHeight)
+        {
+            inSampleSize = Math.round((float)height / (float)requestedHeight);
         }
+        int expectedWidth = width / inSampleSize;
+
+        if (expectedWidth > requestedWidth)
+        {
+            inSampleSize = Math.round((float)width / (float)requestedWidth);
+        }
+
         options.inSampleSize = inSampleSize;
+
         options.inJustDecodeBounds = false;
+
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
 
         ExifInterface exif = new ExifInterface(filePath);
@@ -138,7 +142,6 @@ public class ImageUtils {
         }
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
-
 
     /**
      * Crops a rectangular bitmap to generate a circular bitmap

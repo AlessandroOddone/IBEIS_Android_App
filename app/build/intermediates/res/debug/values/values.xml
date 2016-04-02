@@ -877,7 +877,7 @@
     <string name="detail_individual_info_title">Individual</string>
     <string name="detail_location_title">Setting</string>
     <string name="drawer_item_home">Home</string>
-    <string name="drawer_item_my_pictures">My Pictures</string>
+    <string name="drawer_item_my_pictures">My Ibeis Album</string>
     <!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/debug/res/values/google_maps_api.xml -->
     <eat-comment/>
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">

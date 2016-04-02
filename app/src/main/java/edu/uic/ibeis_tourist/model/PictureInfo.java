@@ -5,17 +5,17 @@ import android.os.Parcelable;
 
 import java.util.GregorianCalendar;
 
-import edu.uic.ibeis_java_api.api.data.annotation.BoundingBox;
-import edu.uic.ibeis_tourist.exceptions.InvalidSexException;
-import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
+import edu.uic.ibeis_java_api.api.annotation.BoundingBox;
+import edu.uic.ibeis_java_api.values.Sex;
+import edu.uic.ibeis_java_api.values.Species;
 
 public class PictureInfo implements Parcelable {
     private String fileName;
     private GregorianCalendar dateTime;
     private Position position;
     private String individualName;
-    private SpeciesEnum individualSpecies;
-    private SexEnum individualSex;
+    private Species individualSpecies;
+    private Sex individualSex;
     private Location location;
     private BoundingBox annotationBbox;
 
@@ -53,28 +53,20 @@ public class PictureInfo implements Parcelable {
         this.individualName = individualName;
     }
 
-    public SpeciesEnum getIndividualSpecies() {
+    public Species getIndividualSpecies() {
         return individualSpecies;
     }
 
-    public void setIndividualSpecies(SpeciesEnum individualSpecies) {
+    public void setIndividualSpecies(Species individualSpecies) {
         this.individualSpecies = individualSpecies;
     }
 
-    public void setIndividualSpecies(String individualSpecies) throws InvalidSpeciesException {
-        this.individualSpecies = SpeciesEnum.fromString(individualSpecies);
-    }
-
-    public SexEnum getIndividualSex() {
+    public Sex getIndividualSex() {
         return individualSex;
     }
 
-    public void setIndividualSex(SexEnum individualSex) {
+    public void setIndividualSex(Sex individualSex) {
         this.individualSex = individualSex;
-    }
-
-    public void setIndividualSex(String individualSex) throws InvalidSexException {
-        this.individualSex = SexEnum.fromString(individualSex);
     }
 
     public BoundingBox getAnnotationBbox() {
@@ -96,29 +88,32 @@ public class PictureInfo implements Parcelable {
     // Implementation of Parcelable interface
 
     public PictureInfo(Parcel in){
+        fileName = in.readString();
+        dateTime = new GregorianCalendar();
+        dateTime.setTimeInMillis(in.readLong());
+        position = new Position(in.readDouble(), in.readDouble());
+        individualName = in.readString();
         try {
-            fileName = in.readString();
-            dateTime = new GregorianCalendar();
-            dateTime.setTimeInMillis(in.readLong());
-            position = new Position(in.readDouble(), in.readDouble());
-            individualName = in.readString();
-            individualSex = SexEnum.fromString(in.readString());
-            individualSpecies = SpeciesEnum.fromString(in.readString());
-            location = in.readParcelable(Location.class.getClassLoader());
+            individualSex = Sex.fromValue(in.readInt());
+        } catch (edu.uic.ibeis_java_api.exceptions.InvalidSexException e) {
+            individualSex = Sex.UNKNOWN;
+        }
+        try {
+            individualSpecies = Species.fromValue(in.readString());
+        } catch (edu.uic.ibeis_java_api.exceptions.InvalidSpeciesException e) {
+            individualSpecies = Species.UNKNOWN;
+        }
+        location = in.readParcelable(Location.class.getClassLoader());
 
-            int x = in.readInt();
-            int y = in.readInt();
-            int w = in.readInt();
-            int h = in.readInt();
-            if (x!=-1 && y!=-1 && w!=-1 && h!=-1) {
-                annotationBbox = new BoundingBox(x, y, w, h);
-            }
-            else {
-                annotationBbox = null;
-            }
-
-        } catch (InvalidSexException | InvalidSpeciesException e) {
-            e.printStackTrace();
+        int x = in.readInt();
+        int y = in.readInt();
+        int w = in.readInt();
+        int h = in.readInt();
+        if (x!=-1 && y!=-1 && w!=-1 && h!=-1) {
+            annotationBbox = new BoundingBox(x, y, w, h);
+        }
+        else {
+            annotationBbox = null;
         }
     }
 
@@ -134,8 +129,8 @@ public class PictureInfo implements Parcelable {
         dest.writeDouble(position.getLatitude());
         dest.writeDouble(position.getLongitude());
         dest.writeString(individualName);
-        dest.writeString(individualSex.asString());
-        dest.writeString(individualSpecies.asString());
+        dest.writeInt(individualSex.getValue());
+        dest.writeString(individualSpecies.getValue());
         dest.writeParcelable(location, 0);
         dest.writeInt(annotationBbox != null ? annotationBbox.getX() : -1);
         dest.writeInt(annotationBbox != null ? annotationBbox.getY() : -1);

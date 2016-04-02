@@ -23,16 +23,17 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.GregorianCalendar;
 
-import edu.uic.ibeis_java_api.api.data.annotation.BoundingBox;
+import edu.uic.ibeis_java_api.api.annotation.BoundingBox;
+import edu.uic.ibeis_java_api.values.Sex;
+import edu.uic.ibeis_java_api.values.Species;
+import edu.uic.ibeis_tourist.activity_enums.ActivityEnum;
 import edu.uic.ibeis_tourist.exceptions.ImageLoadingException;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
-import edu.uic.ibeis_tourist.model.SexEnum;
-import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
-import edu.uic.ibeis_tourist.activity_enums.ActivityEnum;
 import edu.uic.ibeis_tourist.view_elements.DragRectImageView;
+
 
 public class AnnotatePictureActivity extends ActionBarActivity {
 
@@ -131,8 +132,8 @@ public class AnnotatePictureActivity extends ActionBarActivity {
             pictureInfo.setPosition((Position) intent.getParcelableExtra("position"));
             pictureInfo.setDateTime(dateTime);
             pictureInfo.setIndividualName(null);
-            pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
-            pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
+            pictureInfo.setIndividualSpecies(Species.UNKNOWN);
+            pictureInfo.setIndividualSex(Sex.UNKNOWN);
             pictureInfo.setAnnotationBbox(null);
 
             try {

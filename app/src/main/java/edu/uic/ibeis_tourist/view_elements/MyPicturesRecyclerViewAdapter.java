@@ -88,7 +88,7 @@ public class MyPicturesRecyclerViewAdapter extends RecyclerView.Adapter<MyPictur
                 .fit()
                 .into(viewHolder.pictureImageView);
 
-        String species = mPictureInfoList.get(position).getIndividualSpecies().asString().toUpperCase();
+        String species = mPictureInfoList.get(position).getIndividualSpecies().toString().toUpperCase();
         String name = mPictureInfoList.get(position).getIndividualName();
         String location = mPictureInfoList.get(position).getLocation().getName();
         String date = DateTimeUtils.calendarToString

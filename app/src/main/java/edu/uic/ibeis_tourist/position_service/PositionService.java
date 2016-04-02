@@ -19,7 +19,7 @@ import android.support.v4.content.ContextCompat;
 public class PositionService extends Service {
 
     // Location provider
-    private static final String PROVIDER = LocationManager./*GPS_PROVIDER;*/NETWORK_PROVIDER;
+    private static final String PROVIDER = LocationManager.GPS_PROVIDER;//NETWORK_PROVIDER;
     // Minimum time interval between GPS updates in milliseconds
     private static final int MIN_TIME_UPDATES = 0;
     // Minimum distance interval between GPS updates in meters

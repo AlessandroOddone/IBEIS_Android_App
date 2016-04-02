@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.uic.ibeis_java_api.api.data.annotation.BoundingBox;
+import edu.uic.ibeis_java_api.api.annotation.BoundingBox;
 import edu.uic.ibeis_tourist.R;
 
 public class DragRectImageView extends ImageView {

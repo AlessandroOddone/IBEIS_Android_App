@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -45,7 +44,6 @@ import edu.uic.ibeis_tourist.position_service.PositionService;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
 import edu.uic.ibeis_tourist.activity_enums.ActivityForResultRequestEnum;
 import edu.uic.ibeis_tourist.position_service.PositionEvent;
-import io.fabric.sdk.android.Fabric;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -177,7 +175,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //System.out.println("MainActivity: onCreate");
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
 
         setContentView(R.layout.activity_main);
         initToolbar();

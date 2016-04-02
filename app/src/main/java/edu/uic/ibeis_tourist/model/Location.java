@@ -62,5 +62,4 @@ public class Location implements Parcelable {
             return new Location[size];
         }
     };
-
 }

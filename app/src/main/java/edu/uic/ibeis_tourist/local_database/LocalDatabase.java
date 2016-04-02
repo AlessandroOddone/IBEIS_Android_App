@@ -11,16 +11,14 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import edu.uic.ibeis_java_api.values.Sex;
+import edu.uic.ibeis_java_api.values.Species;
 import edu.uic.ibeis_tourist.MainActivity;
 import edu.uic.ibeis_tourist.MyPicturesActivity;
-import edu.uic.ibeis_tourist.exceptions.InvalidSexException;
-import edu.uic.ibeis_tourist.exceptions.InvalidSpeciesException;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.LocationBounds;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
-import edu.uic.ibeis_tourist.model.SexEnum;
-import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;
 import edu.uic.ibeis_tourist.utils.LocationUtils;
 
@@ -151,13 +149,13 @@ public class LocalDatabase implements LocalDatabaseInterface {
             values.put(LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_LOCATION_ID,
                     mPictureInfo.getLocation().getId());
 
-            SpeciesEnum species = mPictureInfo.getIndividualSpecies();
+            Species species = mPictureInfo.getIndividualSpecies();
             values.put(LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES,
-                    species != null ? species.asString() : NOT_AVAILABLE);
+                    species != null ? species.toString() : NOT_AVAILABLE);
 
-            SexEnum sex = mPictureInfo.getIndividualSex();
+            Sex sex = mPictureInfo.getIndividualSex();
             values.put(LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX,
-                    sex != null ? sex.asString() : NOT_AVAILABLE);
+                    sex != null ? sex.getValue() : -1);
 
             db.insert(LocalDatabaseContract.PictureInfoEntry.TABLE_NAME,
                       LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_FILENAME, values);
@@ -283,28 +281,20 @@ public class LocalDatabase implements LocalDatabaseInterface {
                     pictureInfo.setIndividualName(individualName);
                 }
 
+                int sex = cursor.getInt(cursor.getColumnIndex
+                        (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX));
                 try {
-                    String sex = cursor.getString(cursor.getColumnIndex
-                            (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX));
-                    if(sex.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
-                    }
-                    else {
-                        pictureInfo.setIndividualSex(SexEnum.fromString(sex));
-                    }
+                    pictureInfo.setIndividualSex(Sex.fromValue(sex));
+                } catch (edu.uic.ibeis_java_api.exceptions.InvalidSexException e) {
+                    pictureInfo.setIndividualSex(Sex.UNKNOWN);
+                }
 
-                    String species = cursor.getString(cursor.getColumnIndex
-                            (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES));
-                    if(species.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
-                    }
-                    else {
-                        pictureInfo.setIndividualSpecies(SpeciesEnum.fromString(species));
-                    }
-
-                } catch (InvalidSexException | InvalidSpeciesException e) {
-                    pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
-                    e.printStackTrace();
+                String species = cursor.getString(cursor.getColumnIndex
+                        (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES));
+                try {
+                    pictureInfo.setIndividualSpecies(Species.fromValue(species));
+                } catch (edu.uic.ibeis_java_api.exceptions.InvalidSpeciesException e) {
+                    pictureInfo.setIndividualSpecies(Species.UNKNOWN);
                 }
 
                 try {
@@ -414,28 +404,20 @@ public class LocalDatabase implements LocalDatabaseInterface {
                     pictureInfo.setIndividualName(individualName);
                 }
 
+                int sex = cursor.getInt(cursor.getColumnIndex
+                        (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX));
                 try {
-                    String sex = cursor.getString(cursor.getColumnIndex
-                            (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SEX));
-                    if(sex.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
-                    }
-                    else {
-                        pictureInfo.setIndividualSex(SexEnum.fromString(sex));
-                    }
+                    pictureInfo.setIndividualSex(Sex.fromValue(sex));
+                } catch (edu.uic.ibeis_java_api.exceptions.InvalidSexException e) {
+                    pictureInfo.setIndividualSex(Sex.UNKNOWN);
+                }
 
-                    String species = cursor.getString(cursor.getColumnIndex
-                            (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES));
-                    if(species.equals(NOT_AVAILABLE)) {
-                        pictureInfo.setIndividualSpecies(SpeciesEnum.UNKNOWN);
-                    }
-                    else {
-                        pictureInfo.setIndividualSpecies(SpeciesEnum.fromString(species));
-                    }
-
-                } catch (InvalidSexException | InvalidSpeciesException e) {
-                    pictureInfo.setIndividualSex(SexEnum.UNKNOWN);
-                    e.printStackTrace();
+                String species = cursor.getString(cursor.getColumnIndex
+                        (LocalDatabaseContract.PictureInfoEntry.COLUMN_NAME_INDIVIDUAL_SPECIES));
+                try {
+                    pictureInfo.setIndividualSpecies(Species.fromValue(species));
+                } catch (edu.uic.ibeis_java_api.exceptions.InvalidSpeciesException e) {
+                    pictureInfo.setIndividualSpecies(Species.UNKNOWN);
                 }
 
                 try {

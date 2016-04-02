@@ -31,6 +31,8 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 
+import edu.uic.ibeis_java_api.values.Sex;
+import edu.uic.ibeis_java_api.values.Species;
 import edu.uic.ibeis_tourist.activity_enums.ActivityEnum;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.ibeis.IbeisController;
@@ -38,8 +40,6 @@ import edu.uic.ibeis_tourist.ibeis.IbeisInterface;
 import edu.uic.ibeis_tourist.model.Location;
 import edu.uic.ibeis_tourist.model.PictureInfo;
 import edu.uic.ibeis_tourist.model.Position;
-import edu.uic.ibeis_tourist.model.SexEnum;
-import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.DateTimeUtils;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
 
@@ -232,16 +232,16 @@ public class PictureDetailActivity extends ActionBarActivity {
             }
             */
 
-            SpeciesEnum species = pictureInfo.getIndividualSpecies();
+            Species species = pictureInfo.getIndividualSpecies();
             String name = pictureInfo.getIndividualName();
-            SexEnum sex = pictureInfo.getIndividualSex();
+            Sex sex = pictureInfo.getIndividualSex();
             Location location = pictureInfo.getLocation();
             Position position = pictureInfo.getPosition();
             Calendar datetime = pictureInfo.getDateTime();
 
-            setDetailAttributeText(speciesText, "Species: " + (species != null ? species.asString() : NOT_AVAILABLE));
-            setDetailAttributeText(nameText, "Name: " + (name != null ? name : NOT_AVAILABLE));
-            setDetailAttributeText(sexText, "Sex: " + (sex != null ? sex.asString() : NOT_AVAILABLE));
+            setDetailAttributeText(speciesText, "Species: " + (species != null ? species.toString().toUpperCase() : NOT_AVAILABLE));
+            setDetailAttributeText(nameText, "Name: " + (name != null ? name.toUpperCase() : NOT_AVAILABLE));
+            setDetailAttributeText(sexText, "Sex: " + (sex != null ? sex.toString() : NOT_AVAILABLE));
             setDetailAttributeText(locationText, "Location: " + (location != null ? location.getName() : NOT_AVAILABLE));
             setDetailAttributeText(coordinatesText, "Coordinates: " + (position != null ? "("
                     + new DecimalFormat("0.000").format(position.getLatitude()) + ", " +

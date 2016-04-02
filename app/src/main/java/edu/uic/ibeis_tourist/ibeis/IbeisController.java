@@ -3,20 +3,25 @@ package edu.uic.ibeis_tourist.ibeis;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import edu.uic.ibeis_java_api.api.Ibeis;
 import edu.uic.ibeis_java_api.api.IbeisAnnotation;
 import edu.uic.ibeis_java_api.api.IbeisImage;
 import edu.uic.ibeis_java_api.api.IbeisIndividual;
-import edu.uic.ibeis_java_api.values.Sex;
+import edu.uic.ibeis_java_api.identification_tools.IbeisDbAnnotationInfosWrapper;
+import edu.uic.ibeis_java_api.identification_tools.identification_algorithm.IdentificationAlgorithm;
+import edu.uic.ibeis_java_api.identification_tools.identification_algorithm.IdentificationAlgorithmType;
+import edu.uic.ibeis_java_api.identification_tools.identification_algorithm.result.IdentificationAlgorithmResult;
+import edu.uic.ibeis_java_api.values.Species;
 import edu.uic.ibeis_tourist.PictureDetailActivity;
 import edu.uic.ibeis_tourist.R;
 import edu.uic.ibeis_tourist.exceptions.MatchNotFoundException;
 import edu.uic.ibeis_tourist.local_database.LocalDatabase;
 import edu.uic.ibeis_tourist.model.PictureInfo;
-import edu.uic.ibeis_tourist.model.SexEnum;
-import edu.uic.ibeis_tourist.model.SpeciesEnum;
 import edu.uic.ibeis_tourist.utils.ImageUtils;
 
 
@@ -29,7 +34,6 @@ public class IbeisController implements IbeisInterface {
     }
 
     // AsyncTask classes implementation
-
     private class IdentifyIndividualAsyncTask extends AsyncTask<Void, Void, PictureInfo> {
 
         private Ibeis ibeis;
@@ -53,30 +57,29 @@ public class IbeisController implements IbeisInterface {
                 image = ibeis.uploadImage(new File(ImageUtils.PATH_TO_IMAGE_FILE + mPictureInfo.getFileName()));
                 IbeisAnnotation queryAnnotation = ibeis.addAnnotation(image, mPictureInfo.getAnnotationBbox());
 
-                QueryAlgorithmResult queryAlgorithmResult = new QueryAlgorithm(
-                        mContext.getResources().openRawResource(R.raw.giraffe_db_hash_map),
-                        mContext.getResources().openRawResource(R.raw.giraffe_db_ids_list))
-                        .query(queryAnnotation);
-                IbeisIndividual resultIndividual = queryAlgorithmResult.getIndividual();
-                SpeciesEnum species = queryAlgorithmResult.getSpecies();
-                if(resultIndividual != null) {
-                    mPictureInfo.setIndividualName(resultIndividual.getName());
-                    mPictureInfo.setIndividualSpecies(species.asString());
-                    Sex individualSex = resultIndividual.getSex();
-                    if (individualSex == Sex.MALE) {
-                        mPictureInfo.setIndividualSex(SexEnum.MALE);
-                    } else if (individualSex == Sex.FEMALE) {
-                        mPictureInfo.setIndividualSex(SexEnum.FEMALE);
-                    } else {
-                        mPictureInfo.setIndividualSex(SexEnum.UNKNOWN);
+                //identification
+                IbeisDbAnnotationInfosWrapper ibeisDbAnnotationInfosWrapper = readIbeisDbAnnotationInfosWrapperFromFile();
+                if (ibeisDbAnnotationInfosWrapper != null) {
+                    IdentificationAlgorithm identificationAlgorithm = new IdentificationAlgorithm(ibeisDbAnnotationInfosWrapper,
+                            IdentificationAlgorithmType.THRESHOLDS_ONE_VS_ALL, 0.5, 0.5, 0.5, 1, false);
+                    IdentificationAlgorithmResult identificationAlgorithmResult = identificationAlgorithm.execute(queryAnnotation);
+
+                    IbeisIndividual resultIndividual = identificationAlgorithmResult.getIndividual();
+                    Species resultSpecies = identificationAlgorithmResult.getSpecies();
+                    if (resultSpecies != null) {
+                        mPictureInfo.setIndividualSpecies(resultSpecies);
+                        if(resultIndividual != null) {
+                            mPictureInfo.setIndividualName(resultIndividual.getName());
+                            mPictureInfo.setIndividualSex(resultIndividual.getSex());
+                        }
                     }
                 }
-            } catch (Exception e) {//TODO handle exceptions
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 try {
                     ibeis.deleteImage(image);
-                } catch (Exception e) {//TODO handle exception
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -93,5 +96,22 @@ public class IbeisController implements IbeisInterface {
             pictureDetailActivity.displayPictureInfo(mPictureInfo);
         }
 
+        private IbeisDbAnnotationInfosWrapper readIbeisDbAnnotationInfosWrapperFromFile() {
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(new InputStreamReader(mContext.getResources().openRawResource(R.raw.one_vs_many_thresholds_annot_infos)));
+                return IbeisDbAnnotationInfosWrapper.fromJson(reader.readLine());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (reader != null) reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
     }
 }

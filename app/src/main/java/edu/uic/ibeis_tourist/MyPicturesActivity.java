@@ -94,7 +94,7 @@ public class MyPicturesActivity extends ActionBarActivity
                 })
                 .build();
 
-        Drawer result = new DrawerBuilder()
+        new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)

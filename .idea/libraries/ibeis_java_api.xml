@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ibeis_java_api">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/libs/ibeis_java_api.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

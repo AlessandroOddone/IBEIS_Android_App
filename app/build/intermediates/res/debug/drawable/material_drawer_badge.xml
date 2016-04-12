@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="5dp" />
+    <solid android:color="@android:color/black" />
+</shape><!-- From: file:/Users/mikepenz/Drive/Development/AndroidLibraries/MaterialDrawer/library/src/main/res/drawable/material_drawer_badge.xml --><!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/build/intermediates/exploded-aar/com.mikepenz/materialdrawer/4.3.1/res/drawable/material_drawer_badge.xml -->

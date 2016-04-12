@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/my_pictures_context_delete"
-        android:title="Delete Items"
-        android:icon="@android:drawable/ic_menu_delete" />
-</menu><!-- From: file:/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/src/main/res/menu/context_menu_my_pictures.xml -->

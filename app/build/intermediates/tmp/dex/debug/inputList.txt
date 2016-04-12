@@ -1,1 +1,0 @@
-/home/alessandro/AndroidStudioProjects/IBEIS_Nature_Lover/app/build/intermediates/multi-dex/debug/allclasses.jar
